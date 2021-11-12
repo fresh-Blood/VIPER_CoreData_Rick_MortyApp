@@ -1,7 +1,8 @@
 import Foundation
 import UIKit
 
-class CustomCell: UITableViewCell {
+
+final class CustomCell: UITableViewCell {
     
     var personImage: UIImageView = {
         let img = UIImageView()

@@ -19,14 +19,14 @@ protocol GetData {
     var store: UserStore? { get set }
     var presenter: Presenter? { get set }
     
-    func saveTobd(this: String)
-    func getAllCharacters()
+    func saveTobd(this: String) throws
+    func getAllCharacters() throws
 }
 
 final class UserInteractor: GetData {
     
-    func saveTobd(this: String) {
-        store?.saveAllCharacters(what: this)
+    func saveTobd(this: String) throws {
+        try store?.saveAllCharacters(what: this)
         print("Succesfully saved \(this) to BD")
     }
     
@@ -34,7 +34,7 @@ final class UserInteractor: GetData {
 
     var presenter: Presenter?
     
-    func getAllCharacters() {
+    func getAllCharacters() throws {
         
         print("getting data...")
         if let url = URL(string: "https://rickandmortyapi.com/api/character") {
@@ -46,7 +46,7 @@ final class UserInteractor: GetData {
                         self?.presenter?.results = parsedJson.results
                         
                         // MARK: Saving to CoreData
-                        self?.saveTobd(this: "AllCharactersProxy")
+                        try self?.saveTobd(this: "AllCharactersProxy")
                         
                         DispatchQueue.main.async {
                             self?.presenter?.view?.updateTableView()
@@ -59,7 +59,6 @@ final class UserInteractor: GetData {
                 }
             }.resume()
         }
-        
     }
 }
 

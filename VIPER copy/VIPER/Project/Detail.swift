@@ -13,54 +13,78 @@ protocol View1 {
     var presenter: Presenter? { get set }
     var person: UserCharacter? { get set }
     var id: Int { get set }
+    var results : [UserResults]? { get set }
+    var picture: UIImage? {get set}
 }
 
 final class SecondViewController: UIViewController, View1 {
     
+    var picture: UIImage?
+    var results: [UserResults]?
     var presenter: Presenter?
     var person: UserCharacter?
+    var filteredModel: UserResults?
+    var id: Int = 0
     
-    var id: Int = 0 {
-        didSet {
-            
-            if let url = URL(string: "https://rickandmortyapi.com/api/character/\(self.id)") {
-                URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
-                    if let data = data {
-                        do {
-                            let parsedJson = try JSONDecoder().decode(Character.self, from: data)
-                            self?.person = parsedJson
-                            
-                            // MARK: Saving to CoreData
-                            self?.presenter?.interactor?.saveTobd(this: "CharacterProxy")
-                            
-                            if let url = URL(string: self?.person?.image ?? "error") {
-                                URLSession.shared.dataTask(with: url)
-                                if let data = try? Data(contentsOf: url) {
-                                    DispatchQueue.main.async {
-                                        self?.image.image = UIImage(data: data)!
-                                        self?.name.text = self?.person?.name
-                                        if self?.person?.status == "Dead" {
-                                            self?.liveStatusImage.backgroundColor = .red
-                                            self?.liveStatus.text = "Dead"
-                                        }
-                                        if self?.person?.status == "Alive" {
-                                            self?.liveStatusImage.backgroundColor = .green
-                                            self?.liveStatus.text = "Alive"
-                                        }
-                                        self?.gender.text = self?.person?.gender
-                                        self?.lastKnownLocation.text = self?.person?.location?.name
-                                        self?.firstSeenIn.text = self?.person?.episode?.first
+    func getDataFromBD() {
+        print("getting data from BD")
+        let filteredArray = self.results?.filter{
+            var model: UserResults?
+            if $0.id == self.id { model = $0 }
+            return model != nil
+        }
+        
+        guard let unwrapped = filteredArray else { return }
+        for model in unwrapped {
+            filteredModel = model
+        }
+        DispatchQueue.main.async { [self] in
+            image.image = picture
+            name.text = filteredModel?.name
+            liveStatus.text = filteredModel?.status
+            if liveStatus.text == "Alive" { liveStatusImage.backgroundColor = .green }
+            else { liveStatusImage.backgroundColor = .red }
+            gender.text = filteredModel?.gender
+            lastKnownLocation.text = filteredModel?.location?.name
+            firstSeenIn.text = filteredModel?.origin?.name
+        }
+    }
+    
+    func getData() {
+        print("getting character data...")
+        if let url = URL(string: "https://rickandmortyapi.com/api/character/\(self.id)") {
+            URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
+                if let data = data {
+                    do {
+                        let parsedJson = try JSONDecoder().decode(Character.self, from: data)
+                        self?.person = parsedJson
+
+                        if let url = URL(string: self?.person?.image ?? "error") {
+                            URLSession.shared.dataTask(with: url)
+                            if let data = try? Data(contentsOf: url) {
+                                DispatchQueue.main.async {
+                                    self?.image.image = UIImage(data: data)!
+                                    self?.name.text = self?.person?.name
+                                    if self?.person?.status == "Dead" {
+                                        self?.liveStatusImage.backgroundColor = .red
+                                        self?.liveStatus.text = "Dead"
                                     }
+                                    if self?.person?.status == "Alive" {
+                                        self?.liveStatusImage.backgroundColor = .green
+                                        self?.liveStatus.text = "Alive"
+                                    }
+                                    self?.gender.text = self?.person?.gender
+                                    self?.lastKnownLocation.text = self?.person?.location?.name
+                                    self?.firstSeenIn.text = self?.person?.episode?.first
                                 }
                             }
                         }
-                        catch {
-                            print("No internet connection")
-                        }
                     }
-                }.resume()
-            }
-            
+                    catch {
+                        print("No internet connection")
+                    }
+                }
+            }.resume()
         }
     }
     
@@ -137,6 +161,12 @@ final class SecondViewController: UIViewController, View1 {
         lbl.font = .systemFont(ofSize: 20)
         return lbl
     }()
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        //        getData()
+        getDataFromBD()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

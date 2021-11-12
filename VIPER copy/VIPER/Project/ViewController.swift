@@ -19,6 +19,15 @@ protocol View {
 
 final class ViewController: UIViewController, View {
     
+    // Example for UNIT Test
+    var one = 10
+    var two = 30
+    var result1 = Int()
+    func summ() {
+        result1 = one + two
+    }
+    //
+    
     var presenter: Presenter?
     
     func updateTableView() {
@@ -43,7 +52,7 @@ final class ViewController: UIViewController, View {
         super.viewDidLayoutSubviews()
         myTableView.frame = view.bounds
     }
-    let secondvc = SecondViewController()
+    var picture = UIImage()
 }
 
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
@@ -60,6 +69,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             URLSession.shared.dataTask(with: url)
             if let data = try? Data(contentsOf: url) {
                 cell.personImage.image = UIImage(data: data)
+                self.picture = UIImage(data: data)! // 
             }
         }
         if model?.status == "Dead" {
@@ -78,8 +88,15 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let secondvc = SecondViewController()
+        
         let person = presenter?.results?[indexPath.row]
-        self.secondvc.id = Int(person?.id ?? 0)
+        let array = presenter?.results
+        
+        secondvc.id = Int(person?.id ?? 0)
+        secondvc.results = array
+        secondvc.picture = picture
+        
         self.present(secondvc, animated: true, completion: nil)
         myTableView.deselectRow(at: indexPath, animated: true)
     }

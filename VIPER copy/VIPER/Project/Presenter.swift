@@ -19,18 +19,20 @@ protocol Presenter {
     var router: Router? { get set }
     var interactor: GetData? { get set }
     var view: View? { get set }
+    var view1: View1? { get set }
     var results : [UserResults]? { get set }
 }
 
 final class UserPresenter: Presenter {
+    var view1: View1?
     
-    var results: [UserResults]? = []
+    var results: [UserResults]? = [] 
     
     var router: Router? = UserRouter()
     
     var interactor: GetData? {
         didSet {
-            self.interactor?.getAllCharacters()
+            try? self.interactor?.getAllCharacters()
         }
     }
     
