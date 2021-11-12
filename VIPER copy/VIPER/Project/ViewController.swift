@@ -18,6 +18,7 @@ protocol View {
 }
 
 final class ViewController: UIViewController, View {
+    var presenter: Presenter?
     
     // Example for UNIT Test
     var one = 10
@@ -27,8 +28,6 @@ final class ViewController: UIViewController, View {
         result1 = one + two
     }
     //
-    
-    var presenter: Presenter?
     
     func updateTableView() {
         myTableView.reloadData()
@@ -46,13 +45,12 @@ final class ViewController: UIViewController, View {
         myTableView.delegate = self
         myTableView.dataSource = self
         view.addSubview(myTableView)
+        
     }
-    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         myTableView.frame = view.bounds
     }
-    var picture = UIImage()
 }
 
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
@@ -64,22 +62,13 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = myTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomCell
         let model = presenter?.results?[indexPath.row]
+        if !(presenter?.imagesArray?.isEmpty)! {
+            cell.personImage.image = presenter?.imagesArray?[(model?.id ?? 0) - 1]
+        }
         cell.name.text = model?.name
-        if let url = URL(string: model?.image ?? "") {
-            URLSession.shared.dataTask(with: url)
-            if let data = try? Data(contentsOf: url) {
-                cell.personImage.image = UIImage(data: data)
-                self.picture = UIImage(data: data)! // 
-            }
-        }
-        if model?.status == "Dead" {
-            cell.statusImage.backgroundColor = .red
-            cell.status.text = "Dead"
-        }
-        if model?.status == "Alive" {
-            cell.statusImage.backgroundColor = .green
-            cell.status.text = "Alive"
-        }
+        cell.status.text = model?.status
+        if cell.status.text == "Alive" { cell.statusImage.backgroundColor = .green }
+        else { cell.statusImage.backgroundColor = .red }
         cell.location.text = model?.location?.name
         return cell
     }
@@ -89,13 +78,11 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let secondvc = SecondViewController()
-        
         let person = presenter?.results?[indexPath.row]
-        let array = presenter?.results
         
         secondvc.id = Int(person?.id ?? 0)
-        secondvc.results = array
-        secondvc.picture = picture
+        secondvc.results = presenter?.results
+        secondvc.imagesArray = presenter?.imagesArray
         
         self.present(secondvc, animated: true, completion: nil)
         myTableView.deselectRow(at: indexPath, animated: true)

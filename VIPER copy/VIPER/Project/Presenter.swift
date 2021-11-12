@@ -20,23 +20,24 @@ protocol Presenter {
     var interactor: GetData? { get set }
     var view: View? { get set }
     var view1: View1? { get set }
-    var results : [UserResults]? { get set }
+    var results: [UserResults]? { get set }
+    var imagesArray: [UIImage]? { get set }
 }
 
 final class UserPresenter: Presenter {
+    
+    var imagesArray: [UIImage]? = []
+    var results: [UserResults]? = []
+    
     var view1: View1?
-    
-    var results: [UserResults]? = [] 
-    
     var router: Router? = UserRouter()
-    
     var interactor: GetData? {
         didSet {
             try? self.interactor?.getAllCharacters()
+            sleep(1)
+            try? self.interactor?.getCharacterImage()
         }
     }
-    
     var view: View? = ViewController()
-    
 }
 

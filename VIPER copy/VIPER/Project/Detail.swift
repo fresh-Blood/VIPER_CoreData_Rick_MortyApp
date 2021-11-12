@@ -12,19 +12,19 @@ import CoreData
 protocol View1 {
     var presenter: Presenter? { get set }
     var person: UserCharacter? { get set }
-    var id: Int { get set }
     var results : [UserResults]? { get set }
-    var picture: UIImage? {get set}
+    var imagesArray: [UIImage]? { get set }
+    var id: Int { get set }
 }
 
 final class SecondViewController: UIViewController, View1 {
     
-    var picture: UIImage?
     var results: [UserResults]?
     var presenter: Presenter?
     var person: UserCharacter?
     var filteredModel: UserResults?
     var id: Int = 0
+    var imagesArray: [UIImage]?
     
     func getDataFromBD() {
         print("getting data from BD")
@@ -38,8 +38,11 @@ final class SecondViewController: UIViewController, View1 {
         for model in unwrapped {
             filteredModel = model
         }
+        
         DispatchQueue.main.async { [self] in
-            image.image = picture
+            if !imagesArray!.isEmpty {
+                image.image = imagesArray?[self.id-1]
+            }
             name.text = filteredModel?.name
             liveStatus.text = filteredModel?.status
             if liveStatus.text == "Alive" { liveStatusImage.backgroundColor = .green }
@@ -58,7 +61,7 @@ final class SecondViewController: UIViewController, View1 {
                     do {
                         let parsedJson = try JSONDecoder().decode(Character.self, from: data)
                         self?.person = parsedJson
-
+                        
                         if let url = URL(string: self?.person?.image ?? "error") {
                             URLSession.shared.dataTask(with: url)
                             if let data = try? Data(contentsOf: url) {
@@ -87,7 +90,6 @@ final class SecondViewController: UIViewController, View1 {
             }.resume()
         }
     }
-    
     var image: UIImageView = {
         let img = UIImageView()
         img.contentMode = .scaleAspectFill
