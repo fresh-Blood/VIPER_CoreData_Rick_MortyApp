@@ -53,8 +53,8 @@ final class SecondViewController: UIViewController, View1 {
         }
     }
     
-    func getData() {
-        print("getting character data...")
+    func getDataFromInternet() {
+        print("getting character data from internet")
         if let url = URL(string: "https://rickandmortyapi.com/api/character/\(self.id)") {
             URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
                 if let data = data {
@@ -164,14 +164,13 @@ final class SecondViewController: UIViewController, View1 {
         return lbl
     }()
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(true)
-        //        getData()
-        getDataFromBD()
+    func checkConnection() {
+        Reachability.isConnectedToNetwork() == true ? getDataFromInternet() : getDataFromBD()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        checkConnection()
         view.backgroundColor = .white
         view.addSubview(image)
         view.addSubview(name)
@@ -203,3 +202,24 @@ final class SecondViewController: UIViewController, View1 {
 }
 
 
+public final class Reachability {
+    class func isConnectedToNetwork()->Bool{
+        
+        var status:Bool = false
+        let url = URL(string: "https://google.com/")
+        let request = NSMutableURLRequest(url: url! as URL)
+        request.httpMethod = "HEAD"
+        request.cachePolicy = NSURLRequest.CachePolicy.reloadIgnoringLocalAndRemoteCacheData
+        request.timeoutInterval = 10.0
+        var response: URLResponse?
+        
+        _ = try? NSURLConnection.sendSynchronousRequest(request as URLRequest, returning: &response) as NSData?
+
+        if let httpResponse = response as? HTTPURLResponse {
+            if httpResponse.statusCode == 200 {
+                status = true
+            }
+        }
+        return status
+    }
+}
