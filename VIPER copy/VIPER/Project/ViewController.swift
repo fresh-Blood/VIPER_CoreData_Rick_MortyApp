@@ -16,6 +16,7 @@ protocol View {
     var presenter: Presenter? { get set }
     func updateTableView()
     func animate()
+    func loading()
 }
 
 final class ViewController: UIViewController, View {
@@ -48,17 +49,39 @@ final class ViewController: UIViewController, View {
         lbl.textAlignment = .center
         lbl.text = "No internet connection"
         lbl.numberOfLines = 0
+        lbl.backgroundColor = .systemRed
+        lbl.alpha = 0
+        return lbl
+    }()
+    let loadingLabel: UILabel = {
+        let lbl = UILabel()
+        lbl.font = .systemFont(ofSize: 20)
+        lbl.translatesAutoresizingMaskIntoConstraints = false
+        lbl.textAlignment = .center
+        lbl.text = "Loading..."
+        lbl.numberOfLines = 0
         lbl.backgroundColor = .systemGreen
         lbl.alpha = 0
         return lbl
     }()
     func animate() {
-            UIView.animate(withDuration: 2.0, animations: {
-                self.internetStatusLabel.alpha = 1
+        UIView.animate(withDuration: 2.0, animations: {
+            self.internetStatusLabel.alpha = 1
         }) { finished in
             UIView.animate(withDuration: 2.0) {
                 self.internetStatusLabel.alpha = 0
             }
+        }
+    }
+    func loading() {
+        UIView.animate(withDuration: 1.0, animations: {
+            self.loadingLabel.alpha = 1
+        }) { finished in
+            DispatchQueue.main.asyncAfter(deadline: .now()+3.0, execute: {
+                UIView.animate(withDuration: 0.5) {
+                    self.loadingLabel.alpha = 0
+                }
+            })
         }
     }
     
@@ -70,6 +93,7 @@ final class ViewController: UIViewController, View {
         myTableView.dataSource = self
         view.addSubview(myTableView)
         view.addSubview(internetStatusLabel)
+        view.addSubview(loadingLabel)
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -81,6 +105,10 @@ final class ViewController: UIViewController, View {
         internetStatusLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -800).isActive = true
         internetStatusLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
         internetStatusLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
+        loadingLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 800).isActive = true
+        loadingLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
+        loadingLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
+        loadingLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
     }
 }
 
@@ -108,6 +136,8 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
+        loading()
         
         let secondvc = SecondViewController()
         let person = presenter?.results?[indexPath.row]
@@ -117,10 +147,13 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         secondvc.imagesArray = presenter?.imagesArray
         secondvc.isConnected = presenter?.interactor?.isConnectedToNetwork()
         
-        self.present(secondvc, animated: true, completion: nil)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0, execute: {
+            self.present(secondvc, animated: true, completion: nil)
+        })
         myTableView.deselectRow(at: indexPath, animated: true)
     }
 }
+
 
 
 
