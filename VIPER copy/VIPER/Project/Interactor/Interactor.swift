@@ -21,9 +21,13 @@ protocol GetData {
     func saveTobd(this: String) throws
     func getAllCharacters() throws
     func getCharacterImage() throws
+    
+    func checkConnectionEvery10Seconds()
+    func isConnectedToNetwork() -> Bool
 }
 
 final class UserInteractor: GetData {
+    
     var store: UserStore?
     var presenter: Presenter?
     
@@ -73,7 +77,51 @@ final class UserInteractor: GetData {
             }.resume()
         }
     }
+    var timer = Timer()
+    
+    func checkConnectionEvery10Seconds() {
+        
+        var count: Int = 0 {
+            didSet {
+                if count == 1 {
+                    DispatchQueue.main.async {
+                        self.presenter?.view?.animate()
+                    }
+                }
+            }
+        }
+        self.timer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true, block: { _ in
+            if self.isConnectedToNetwork() == true {
+                print("Good internet connection")
+                count = 0
+            } else {
+                print("No internet connection")
+                count = 1
+            }
+        })
+    }
+    
+    func isConnectedToNetwork() -> Bool {
+        var status:Bool = false
+        
+        let url = URL(string: "https://google.com/")
+        let request = NSMutableURLRequest(url: url! as URL)
+        request.httpMethod = "HEAD"
+        request.cachePolicy = NSURLRequest.CachePolicy.reloadIgnoringLocalAndRemoteCacheData
+        request.timeoutInterval = 10.0
+        var response: URLResponse?
+        
+        _ = try? NSURLConnection.sendSynchronousRequest(request as URLRequest, returning: &response) as NSData?
+        
+        if let httpResponse = response as? HTTPURLResponse {
+            if httpResponse.statusCode == 200 {
+                status = true
+            }
+        }
+        return status
+    }
 }
+
 
 
 

@@ -5,6 +5,9 @@
 //  Created by Admin on 13.11.2021.
 //
 
+
+// Когда я менял ентри поинт в роутере чтобы сначала показывался splashVC - все было ок - лончскрин с картинкой затем splashvc с дублирующей картинкой и анимацией, потом переход на ViewController но его таблица пустая - белый экран (предположительно из за того что таблица не может обновить свои ячейки в фоне?) Пока оставил просто лончскрин без анимации 
+
 import UIKit
 
 protocol UserSplashView {
@@ -44,10 +47,6 @@ final class SplashViewController: UIViewController, UserSplashView {
                 vc.modalTransitionStyle = .crossDissolve
                 vc.modalPresentationStyle = .fullScreen
                 self.present(vc, animated: true, completion: .none)
-                print(
-                    "Персонажей загружено - \(self.presenter?.results?.count)",
-                    "Картинок прогружено - \(self.presenter?.imagesArray?.count)"
-                )
             }
         }
     }

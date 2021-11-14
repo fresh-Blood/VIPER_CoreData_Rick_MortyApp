@@ -12,7 +12,7 @@ import UIKit
 // Object
 // Entry point - getting initialVC
 
-typealias EntryPoint = UserSplashView & UIViewController
+typealias EntryPoint = View & UIViewController
 
 protocol Router {
     var entry: EntryPoint? { get }
@@ -41,7 +41,7 @@ final class UserRouter: Router {
         presenter.view = view
         presenter.interactor = interactor
         
-        router.entry = splashView as? EntryPoint
+        router.entry = view as? EntryPoint
 
         return router
     }

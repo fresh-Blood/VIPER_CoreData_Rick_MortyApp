@@ -41,19 +41,16 @@ class VIPERTests: XCTestCase {
         XCTAssertEqual(result, 40, "Error!")
     }
     func testSaveToBD() {
-        XCTAssertNoThrow(try sut1.saveTobd1(this: "AllCharactersProxy"))
+        XCTAssertNoThrow(try sut1.saveTobd(this: "AllCharactersProxy"))
     }
     func testGetAllCharacters() {
         XCTAssertNoThrow(try sut1.getAllCharacters())
     }
     func testSaveToBD1() {
-        XCTAssertNoThrow(try sut1.saveTobd2(this: "CharacterProxy"))
+        XCTAssertNoThrow(try sut1.getCharacterImage())
     }
     func testSaveAllCharacters() {
         XCTAssertNoThrow(try sut2.saveAllCharacters(what: "AllCharactersProxy"))
-    }
-    func testSaveCharacter() {
-        XCTAssertNoThrow(try sut2.saveCharacter(what: "123"))
     }
 }
 

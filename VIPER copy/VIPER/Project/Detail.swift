@@ -10,17 +10,17 @@ import CoreData
 
 
 protocol View1 {
-    var presenter: Presenter? { get set }
     var person: UserCharacter? { get set }
     var results : [UserResults]? { get set }
     var imagesArray: [UIImage]? { get set }
     var id: Int { get set }
+    var isConnected: Bool? {get set}
 }
 
 final class SecondViewController: UIViewController, View1 {
     
+    var isConnected: Bool?
     var results: [UserResults]?
-    var presenter: Presenter?
     var person: UserCharacter?
     var filteredModel: UserResults?
     var id: Int = 0
@@ -165,7 +165,8 @@ final class SecondViewController: UIViewController, View1 {
     }()
     
     func checkConnection() {
-        Reachability.isConnectedToNetwork() == true ? getDataFromInternet() : getDataFromBD()
+        guard let unwrapped = self.isConnected else { return }
+        unwrapped ? getDataFromInternet() : getDataFromBD()
     }
     
     override func viewDidLoad() {
@@ -201,25 +202,8 @@ final class SecondViewController: UIViewController, View1 {
     }
 }
 
+    
+    
+    
+    
 
-public final class Reachability {
-    class func isConnectedToNetwork()->Bool{
-        
-        var status:Bool = false
-        let url = URL(string: "https://google.com/")
-        let request = NSMutableURLRequest(url: url! as URL)
-        request.httpMethod = "HEAD"
-        request.cachePolicy = NSURLRequest.CachePolicy.reloadIgnoringLocalAndRemoteCacheData
-        request.timeoutInterval = 10.0
-        var response: URLResponse?
-        
-        _ = try? NSURLConnection.sendSynchronousRequest(request as URLRequest, returning: &response) as NSData?
-
-        if let httpResponse = response as? HTTPURLResponse {
-            if httpResponse.statusCode == 200 {
-                status = true
-            }
-        }
-        return status
-    }
-}
