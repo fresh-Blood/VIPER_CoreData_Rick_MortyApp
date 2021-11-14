@@ -21,7 +21,6 @@ protocol GetData {
     func saveTobd(this: String) throws
     func getAllCharacters() throws
     func getCharacterImage() throws
-    
     func checkConnectionEvery10Seconds()
     func isConnectedToNetwork() -> Bool
 }
@@ -30,6 +29,7 @@ final class UserInteractor: GetData {
     
     var store: UserStore?
     var presenter: Presenter?
+    var timer = Timer()
     
     func getCharacterImage() throws {
         guard let unwrappedArr = self.presenter?.results else { return }
@@ -77,7 +77,6 @@ final class UserInteractor: GetData {
             }.resume()
         }
     }
-    var timer = Timer()
     
     func checkConnectionEvery10Seconds() {
         

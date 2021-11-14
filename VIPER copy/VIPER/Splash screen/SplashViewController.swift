@@ -12,6 +12,7 @@ import UIKit
 
 protocol UserSplashView {
     var presenter: Presenter? {get set}
+    func animate()
 }
 
 final class SplashViewController: UIViewController, UserSplashView {
@@ -37,7 +38,7 @@ final class SplashViewController: UIViewController, UserSplashView {
         imageView.frame = view.bounds
     }
     
-    private func animate() {
+    internal func animate() {
         UIView.animate(withDuration: 0.7, animations: { [self] in
             imageView.transform = CGAffineTransform(scaleX: 7.0, y: 1.0)
             imageView.alpha = 0
