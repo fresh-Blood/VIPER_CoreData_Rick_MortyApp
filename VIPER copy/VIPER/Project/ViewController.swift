@@ -108,6 +108,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
         let secondvc = SecondViewController()
         let person = presenter?.results?[indexPath.row]
         
