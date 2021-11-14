@@ -74,11 +74,11 @@ final class ViewController: UIViewController, View {
         }
     }
     func loading() {
-        UIView.animate(withDuration: 1.0, animations: {
+        UIView.animate(withDuration: 0.5, animations: {
             self.loadingLabel.alpha = 1
         }) { finished in
             DispatchQueue.main.asyncAfter(deadline: .now()+3.0, execute: {
-                UIView.animate(withDuration: 0.5) {
+                UIView.animate(withDuration: 0.1) {
                     self.loadingLabel.alpha = 0
                 }
             })
