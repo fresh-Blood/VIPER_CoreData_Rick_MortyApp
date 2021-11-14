@@ -18,39 +18,27 @@ class VIPERTests: XCTestCase {
         try super.setUpWithError()
         sut = ViewController()
         sut1 = UserInteractor()
-        sut2 = Store()
         // Put setup code here. This method is called before the invocation of each test method in the class. // Поместите сюда установочный код. Этот метод вызывается перед вызовом каждого тестового метода в классе.
     }
     
     override func tearDownWithError() throws {
         sut = nil
         sut1 = nil
-        sut2 = nil
         try super.tearDownWithError()
         // Put teardown code here. This method is called after the invocation of each test method in the class. // Поместите здесь код разборки. Этот метод вызывается после вызова каждого тестового метода в классе.
     }
-    
     func testCheckSumm() {
         // given (дано)
         let result = sut.one + sut.two
-        
         // when (когда)
         sut.summ()
-        
         // then (тогда)
         XCTAssertEqual(result, 40, "Error!")
     }
     func testSaveToBD() {
-        XCTAssertNoThrow(try sut1.saveTobd(this: "AllCharactersProxy"))
-    }
-    func testGetAllCharacters() {
-        XCTAssertNoThrow(try sut1.getAllCharacters())
-    }
-    func testSaveToBD1() {
-        XCTAssertNoThrow(try sut1.getCharacterImage())
-    }
-    func testSaveAllCharacters() {
-        XCTAssertNoThrow(try sut2.saveAllCharacters(what: "AllCharactersProxy"))
+        let inputData = "AllCharactersProxy"
+        XCTAssertNoThrow(try sut1.saveTobd(this: inputData))
+        XCTAssertEqual(inputData, "AllCharactersProxy", "Error!")
     }
 }
 

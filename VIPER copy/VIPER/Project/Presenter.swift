@@ -35,7 +35,7 @@ final class UserPresenter: Presenter {
     var router: Router? = UserRouter()
     var interactor: GetData? {
         didSet {
-            try? self.interactor?.getAllCharacters()
+            self.interactor?.getAllCharacters()
             sleep(1)
             try? self.interactor?.getCharacterImage()
         }
