@@ -88,6 +88,7 @@ final class ViewController: UIViewController, View {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureRefreshControl()
         splashShowAnimateDismiss()
         self.presenter?.interactor?.checkConnectionEvery10Seconds()
         view.backgroundColor = .systemGreen
@@ -120,7 +121,7 @@ final class ViewController: UIViewController, View {
         splashscreenPicture.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
     }
     var splashscreenPicture: UIImageView = {
-       let img = UIImageView()
+        let img = UIImageView()
         img.image = UIImage(named: "Image")
         img.contentMode = .scaleAspectFill
         img.translatesAutoresizingMaskIntoConstraints = false
@@ -136,6 +137,18 @@ final class ViewController: UIViewController, View {
                 self.myTableView.alpha = 1
             }
         })
+    }
+    func configureRefreshControl () {
+        myTableView.refreshControl = UIRefreshControl()
+        myTableView.refreshControl?.addTarget(self, action:
+                                                #selector(handleRefreshControl),
+                                              for: .valueChanged)
+    }
+    @objc func handleRefreshControl() {
+        self.updateTableView()
+        DispatchQueue.main.async {
+            self.myTableView.refreshControl?.endRefreshing()
+        }
     }
 }
 
