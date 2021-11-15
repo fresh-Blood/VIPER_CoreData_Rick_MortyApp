@@ -1,4 +1,3 @@
-
 import Foundation
 import UIKit
 import CoreData
@@ -75,49 +74,6 @@ final class Location: NSObject, Codable {
     init(name: String, url: String) {
         self.url = url
         self.name = name
-    }
-}
-
-protocol UserCharacter {
-    var id: Int { get set }
-    var name: String { get set }
-    var status: String { get set }
-    var species: String { get set }
-    var gender: String { get set }
-    var origin: Origin? { get set }
-    var location: Location? { get set }
-    var image: String { get set }
-    var episode: [String]? { get set }
-    var url: String { get set }
-    var created: String { get set }
-}
-
-final class Character: Codable, UserCharacter {
-
-    var id: Int
-    var name: String
-    var status: String
-    var species: String
-    var gender: String
-    var origin: Origin?
-    var location: Location?
-    var image: String
-    var episode: [String]?
-    var url: String
-    var created: String
-
-    init(id: Int, name: String, status: String, species: String, gender: String, origin: Origin?, location: Location?, image: String, episode: [String]?, url: String, created: String) {
-        self.id = id
-        self.name = name
-        self.status = status
-        self.species = species
-        self.gender = gender
-        self.origin = origin
-        self.location = location
-        self.image = image
-        self.episode = episode
-        self.url = url
-        self.created = created
     }
 }
 

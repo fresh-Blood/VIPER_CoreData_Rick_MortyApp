@@ -75,14 +75,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		843EEB56274039F700E274D8 /* Splash screen */ = {
-			isa = PBXGroup;
-			children = (
-				84450176271E0CDC004E116B /* LaunchScreen.storyboard */,
-			);
-			path = "Splash screen";
-			sourceTree = "<group>";
-		};
 		8445015C271E0CD7004E116B = {
 			isa = PBXGroup;
 			children = (
@@ -110,7 +102,6 @@
 				8445016E271E0CD7004E116B /* Main.storyboard */,
 				84CA7D61272AB75F00494B08 /* Cell.swift */,
 				84450174271E0CDC004E116B /* Assets.xcassets */,
-				843EEB56274039F700E274D8 /* Splash screen */,
 				84450179271E0CDC004E116B /* Info.plist */,
 				84450171271E0CD7004E116B /* VIPER.xcdatamodeld */,
 			);
@@ -120,14 +111,23 @@
 		8445017F271E0CE4004E116B /* Project */ = {
 			isa = PBXGroup;
 			children = (
-				8445016C271E0CD7004E116B /* ViewController.swift */,
-				84975A9B272B226B00B35C5B /* Detail.swift */,
+				844DECA72742B502008360D1 /* View */,
 				84F8139A273AEE3F00A0B648 /* Interactor */,
 				84450182271E0D05004E116B /* Presenter.swift */,
 				84450184271E0D0E004E116B /* Entity.swift */,
 				84450186271E0D14004E116B /* UserRouter.swift */,
 			);
 			path = Project;
+			sourceTree = "<group>";
+		};
+		844DECA72742B502008360D1 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				8445016C271E0CD7004E116B /* ViewController.swift */,
+				84975A9B272B226B00B35C5B /* Detail.swift */,
+				84450176271E0CDC004E116B /* LaunchScreen.storyboard */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		84751E17273E5F1B000A9AC5 /* VIPERTests */ = {

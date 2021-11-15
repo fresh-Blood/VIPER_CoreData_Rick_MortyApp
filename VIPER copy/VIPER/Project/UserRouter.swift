@@ -1,13 +1,5 @@
-//
-//  Router.swift
-//  VIPER
-//
-//  Created by Admin on 18.10.2021.
-//
-
 import Foundation
 import UIKit
-
 
 // Object
 // Entry point - getting initialVC
@@ -16,12 +8,10 @@ typealias EntryPoint = View & UIViewController
 
 protocol Router {
     var entry: EntryPoint? { get }
-    
     static func start() -> Router
 }
 
 final class UserRouter: Router {
-
     var entry: EntryPoint?
 
     static func start() -> Router {

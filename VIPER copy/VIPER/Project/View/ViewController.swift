@@ -1,9 +1,3 @@
-//
-//  ViewController.swift
-//  VIPER
-//
-//  Created by Admin on 18.10.2021.
-//
 import Foundation
 import UIKit
 import CoreData
@@ -14,29 +8,25 @@ import CoreData
 
 protocol View {
     var presenter: Presenter? { get set }
+    func animateConnection(text: String, color: UIColor)
     func updateTableView()
-    func animateGoodConnection()
-    func animateBadConnection()
-    func loading()
 }
 
 final class ViewController: UIViewController, View {
-    
     var presenter: Presenter?
     
     // Example for UNIT Test
     var one = 10
     var two = 30
     var result1 = Int()
-    func summ() {
+    private func summ() {
         result1 = one + two
     }
     //
-    
-    func updateTableView() {
+
+    internal func updateTableView() {
         myTableView.reloadData()
     }
-    
     let myTableView: UITableView = {
         let table = UITableView()
         table.translatesAutoresizingMaskIntoConstraints = false
@@ -64,33 +54,20 @@ final class ViewController: UIViewController, View {
         lbl.alpha = 0
         return lbl
     }()
-    func animateBadConnection() {
-        internetStatusLabel.text = "No internet connection"
-        internetStatusLabel.backgroundColor = .systemRed
+    internal func animateConnection(text: String, color: UIColor) {
+        self.internetStatusLabel.text = text
+        self.internetStatusLabel.backgroundColor = color
         UIView.animate(withDuration: 0.5, animations: {
             self.internetStatusLabel.alpha = 1
         }) { finished in
             DispatchQueue.main.asyncAfter(deadline: .now()+2.0, execute: {
-            UIView.animate(withDuration: 0.5) {
-                self.internetStatusLabel.alpha = 0
+                UIView.animate(withDuration: 0.5) {
+                    self.internetStatusLabel.alpha = 0
                 }
             })
         }
     }
-    func animateGoodConnection() {
-        internetStatusLabel.text = "Good internet connection"
-        internetStatusLabel.backgroundColor = .systemGreen
-        UIView.animate(withDuration: 0.5, animations: {
-            self.internetStatusLabel.alpha = 1
-        }) { finished in
-            DispatchQueue.main.asyncAfter(deadline: .now()+2.0, execute: {
-            UIView.animate(withDuration: 0.5) {
-                self.internetStatusLabel.alpha = 0
-                }
-            })
-        }
-    }
-    func loading() {
+    private func loading() {
         UIView.animate(withDuration: 0.5, animations: {
             self.loadingLabel.alpha = 1
         }) { finished in
@@ -134,7 +111,8 @@ final class ViewController: UIViewController, View {
         splashscreenPicture.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
         splashscreenPicture.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
     }
-    var splashscreenPicture: UIImageView = {
+    
+    let splashscreenPicture: UIImageView = {
         let img = UIImageView()
         img.image = UIImage(named: "Image")
         img.contentMode = .scaleAspectFill
@@ -142,7 +120,7 @@ final class ViewController: UIViewController, View {
         img.alpha = 1
         return img
     }()
-    func splashShowAnimateDismiss() {
+    private func splashShowAnimateDismiss() {
         UIView.animate(withDuration: 0.5, animations: {
             self.splashscreenPicture.transform = CGAffineTransform(scaleX: 8.0, y: 8.0)
         }, completion: { finished in
@@ -152,19 +130,19 @@ final class ViewController: UIViewController, View {
             }
         })
     }
-    func configureRefreshControl () {
+    private func configureRefreshControl () {
         myTableView.refreshControl = UIRefreshControl()
         myTableView.refreshControl?.addTarget(self, action:
                                                 #selector(handleRefreshControl),
-                                                for: .valueChanged)
+                                              for: .valueChanged)
     }
-    @objc func handleRefreshControl() {
+    @objc private func handleRefreshControl() {
         sleepTemp()
         DispatchQueue.main.async {
             self.myTableView.refreshControl?.endRefreshing()
         }
     }
-    func sleepTemp() {
+    private func sleepTemp() {
         DispatchQueue.global(qos: .userInteractive).async {
             print("Старт обновления таблицы за 3 сек")
             DispatchQueue.main.async {
@@ -181,7 +159,6 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return presenter?.results?.count ?? 0
     }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = myTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomCell
         let model = presenter?.results?[indexPath.row]
@@ -198,7 +175,6 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 150
     }
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         loading()
         let secondvc = SecondViewController()
@@ -206,7 +182,6 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         secondvc.id = Int(person?.id ?? 0)
         secondvc.results = presenter?.results
         secondvc.imagesArray = presenter?.imagesArray
-        secondvc.isConnected = presenter?.interactor?.isConnectedToNetwork()
         DispatchQueue.main.asyncAfter(deadline: .now() + 3.0, execute: {
             self.present(secondvc, animated: true, completion: nil)
         })

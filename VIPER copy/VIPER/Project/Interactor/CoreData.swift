@@ -1,29 +1,19 @@
-//
-//  CoreData.swift
-//  VIPER
-//
-//  Created by Admin on 09.11.2021.
-//
-
 import Foundation
 import CoreData
 import UIKit
-
 
 protocol UserStore {
     func saveAllCharacters(what: String)
 }
 
 final class Store: UserStore {
-
-    // MARK: Saving AllCharacters to Core Data
     
+    // MARK: Saving AllCharacters to Core Data
     func saveAllCharacters(what: String) {
         
         weak var delegate: AppDelegate?
         weak var context: NSManagedObjectContext?
         
-        //1
         DispatchQueue.main.async {
             delegate = UIApplication.shared.delegate as? AppDelegate
         }
@@ -31,7 +21,6 @@ final class Store: UserStore {
         if let unwrappedContext = context {
             _ = NSEntityDescription.insertNewObject(forEntityName: what, into: unwrappedContext)
         }
-        //2
         do {
             try context?.save()
             print("Succesfully saved \(what) to CoreData")

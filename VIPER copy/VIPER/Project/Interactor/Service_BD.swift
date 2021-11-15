@@ -1,14 +1,6 @@
-//
-//  Service_BD.swift
-//  VIPER
-//
-//  Created by Admin on 09.11.2021.
-//
-
 import Foundation
 import UIKit
 import CoreData
-
 
 final class AllCharactersProxy: NSManagedObject {
     @NSManaged var info: Info?

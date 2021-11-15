@@ -1,10 +1,3 @@
-//
-//  Presenter.swift
-//  VIPER
-//
-//  Created by Admin on 18.10.2021.
-//
-
 import Foundation
 import UIKit
 import CoreData
@@ -28,17 +21,18 @@ final class UserPresenter: Presenter {
     
     var imagesArray: [UIImage]? = []
     var results: [UserResults]? = []
-    
+    var view: View? = ViewController()
     var view1: View1? = SecondViewController()
     var router: Router? = UserRouter()
     var interactor: GetData? {
         didSet {
+            DispatchQueue.global(qos: .userInteractive).sync {
                 self.interactor?.getAllCharacters()
                 sleep(1)
-                try? self.interactor?.getCharacterImage()
+                self.interactor?.getCharacterImage()
+            }
                 self.interactor?.checkConnectionEvery10Seconds()
         }
     }
-    var view: View? = ViewController()
 }
 
