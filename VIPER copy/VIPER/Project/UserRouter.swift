@@ -27,22 +27,18 @@ final class UserRouter: Router {
     static func start() -> Router {
         let router = UserRouter()
         
-        var splashView: UserSplashView = SplashViewController()
         var view: View = ViewController()
         var presenter: Presenter = UserPresenter()
         var interactor: GetData = UserInteractor()
         
         view.presenter = presenter
-        splashView.presenter = presenter
         interactor.presenter = presenter
 
         presenter.router = router
-        presenter.splashView = splashView
         presenter.view = view
         presenter.interactor = interactor
         
         router.entry = view as? EntryPoint
-
         return router
     }
 }

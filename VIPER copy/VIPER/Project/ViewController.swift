@@ -40,6 +40,7 @@ final class ViewController: UIViewController, View {
         let table = UITableView()
         table.translatesAutoresizingMaskIntoConstraints = false
         table.register(CustomCell.self, forCellReuseIdentifier: "cell")
+        table.alpha = 0
         return table
     }()
     let internetStatusLabel: UILabel = {
@@ -87,13 +88,16 @@ final class ViewController: UIViewController, View {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        splashShowAnimateDismiss()
         self.presenter?.interactor?.checkConnectionEvery10Seconds()
-        view.backgroundColor = .blue
+        view.backgroundColor = .systemGreen
         myTableView.delegate = self
         myTableView.dataSource = self
+        view.addSubview(splashscreenPicture)
         view.addSubview(myTableView)
         view.addSubview(internetStatusLabel)
         view.addSubview(loadingLabel)
+        
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -109,6 +113,29 @@ final class ViewController: UIViewController, View {
         loadingLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
         loadingLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
         loadingLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
+        
+        splashscreenPicture.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
+        splashscreenPicture.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
+        splashscreenPicture.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
+        splashscreenPicture.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
+    }
+    var splashscreenPicture: UIImageView = {
+       let img = UIImageView()
+        img.image = UIImage(named: "Image")
+        img.contentMode = .scaleAspectFill
+        img.translatesAutoresizingMaskIntoConstraints = false
+        img.alpha = 1
+        return img
+    }()
+    func splashShowAnimateDismiss() {
+        UIView.animate(withDuration: 0.5, animations: {
+            self.splashscreenPicture.transform = CGAffineTransform(scaleX: 8.0, y: 8.0)
+        }, completion: { finished in
+            UIView.animate(withDuration: 0.1) {
+                self.splashscreenPicture.alpha = 0
+                self.myTableView.alpha = 1
+            }
+        })
     }
 }
 
@@ -136,17 +163,13 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
         loading()
-        
         let secondvc = SecondViewController()
         let person = presenter?.results?[indexPath.row]
-        
         secondvc.id = Int(person?.id ?? 0)
         secondvc.results = presenter?.results
         secondvc.imagesArray = presenter?.imagesArray
         secondvc.isConnected = presenter?.interactor?.isConnectedToNetwork()
-        
         DispatchQueue.main.asyncAfter(deadline: .now() + 3.0, execute: {
             self.present(secondvc, animated: true, completion: nil)
         })

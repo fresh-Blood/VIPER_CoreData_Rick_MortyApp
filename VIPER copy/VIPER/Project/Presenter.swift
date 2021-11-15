@@ -20,14 +20,12 @@ protocol Presenter {
     var interactor: GetData? { get set }
     var view: View? { get set }
     var view1: View1? { get set }
-    var splashView: UserSplashView? {get set}
     var results: [UserResults]? { get set }
     var imagesArray: [UIImage]? { get set }
 }
 
 final class UserPresenter: Presenter {
     
-    var splashView: UserSplashView?
     var imagesArray: [UIImage]? = []
     var results: [UserResults]? = []
     
@@ -35,9 +33,9 @@ final class UserPresenter: Presenter {
     var router: Router? = UserRouter()
     var interactor: GetData? {
         didSet {
-            self.interactor?.getAllCharacters()
-            sleep(1)
-            try? self.interactor?.getCharacterImage()
+                self.interactor?.getAllCharacters()
+                sleep(1)
+                try? self.interactor?.getCharacterImage()
         }
     }
     var view: View? = ViewController()
