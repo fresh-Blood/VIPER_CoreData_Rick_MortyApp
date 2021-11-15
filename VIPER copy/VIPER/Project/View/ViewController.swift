@@ -67,7 +67,7 @@ final class ViewController: UIViewController, View {
             })
         }
     }
-    private func loading() {
+    private func animateLoading() {
         UIView.animate(withDuration: 0.5, animations: {
             self.loadingLabel.alpha = 1
         }) { finished in
@@ -176,13 +176,13 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         return 150
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        loading()
+        animateLoading()
         let secondvc = SecondViewController()
         let person = presenter?.results?[indexPath.row]
         secondvc.id = Int(person?.id ?? 0)
         secondvc.results = presenter?.results
         secondvc.imagesArray = presenter?.imagesArray
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0, execute: {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
             self.present(secondvc, animated: true, completion: nil)
         })
         myTableView.deselectRow(at: indexPath, animated: true)
