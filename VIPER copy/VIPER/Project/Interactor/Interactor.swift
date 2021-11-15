@@ -89,7 +89,6 @@ final class UserInteractor: GetData {
     }
     
     func checkConnectionEvery10Seconds() {
-        
         var count: Int = 0 {
             didSet {
                 if count == 1 {
@@ -111,20 +110,24 @@ final class UserInteractor: GetData {
     }
     
     func isConnectedToNetwork() -> Bool {
+        
         var status:Bool = false
         
-        let url = URL(string: "https://google.com/")
-        let request = NSMutableURLRequest(url: url! as URL)
-        request.httpMethod = "HEAD"
-        request.cachePolicy = NSURLRequest.CachePolicy.reloadIgnoringLocalAndRemoteCacheData
-        request.timeoutInterval = 10.0
-        var response: URLResponse?
-        
-        _ = try? NSURLConnection.sendSynchronousRequest(request as URLRequest, returning: &response) as NSData?
-        
-        if let httpResponse = response as? HTTPURLResponse {
-            if httpResponse.statusCode == 200 {
-                status = true
+        DispatchQueue.global(qos: .background).sync {
+            
+            let url = URL(string: "https://google.com/")
+            let request = NSMutableURLRequest(url: url! as URL)
+            request.httpMethod = "HEAD"
+            request.cachePolicy = NSURLRequest.CachePolicy.reloadIgnoringLocalAndRemoteCacheData
+            request.timeoutInterval = 10.0
+            var response: URLResponse?
+            
+            _ = try? NSURLConnection.sendSynchronousRequest(request as URLRequest, returning: &response) as NSData?
+            
+            if let httpResponse = response as? HTTPURLResponse {
+                if httpResponse.statusCode == 200 {
+                    status = true
+                }
             }
         }
         return status

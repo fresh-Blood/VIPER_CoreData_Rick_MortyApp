@@ -90,7 +90,6 @@ final class ViewController: UIViewController, View {
         super.viewDidLoad()
         configureRefreshControl()
         splashShowAnimateDismiss()
-        self.presenter?.interactor?.checkConnectionEvery10Seconds()
         view.backgroundColor = .systemGreen
         myTableView.delegate = self
         myTableView.dataSource = self
@@ -98,8 +97,8 @@ final class ViewController: UIViewController, View {
         view.addSubview(myTableView)
         view.addSubview(internetStatusLabel)
         view.addSubview(loadingLabel)
-        
     }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         myTableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
@@ -114,7 +113,6 @@ final class ViewController: UIViewController, View {
         loadingLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
         loadingLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
         loadingLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
-        
         splashscreenPicture.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
         splashscreenPicture.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
         splashscreenPicture.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
@@ -142,12 +140,22 @@ final class ViewController: UIViewController, View {
         myTableView.refreshControl = UIRefreshControl()
         myTableView.refreshControl?.addTarget(self, action:
                                                 #selector(handleRefreshControl),
-                                              for: .valueChanged)
+                                                for: .valueChanged)
     }
     @objc func handleRefreshControl() {
-        self.updateTableView()
+        sleepTemp()
         DispatchQueue.main.async {
             self.myTableView.refreshControl?.endRefreshing()
+        }
+    }
+    func sleepTemp() {
+        DispatchQueue.global(qos: .userInteractive).async {
+            print("Старт обновления таблицы за 3 сек")
+            DispatchQueue.main.async {
+                self.updateTableView()
+            }
+            sleep(3)
+            print("Таблица обновлена")
         }
     }
 }

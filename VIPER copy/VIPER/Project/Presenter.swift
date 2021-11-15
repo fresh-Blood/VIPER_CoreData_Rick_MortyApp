@@ -36,6 +36,7 @@ final class UserPresenter: Presenter {
                 self.interactor?.getAllCharacters()
                 sleep(1)
                 try? self.interactor?.getCharacterImage()
+                self.interactor?.checkConnectionEvery10Seconds()
         }
     }
     var view: View? = ViewController()
