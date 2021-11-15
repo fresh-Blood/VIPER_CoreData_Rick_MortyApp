@@ -9,7 +9,7 @@ protocol UserStore {
 final class Store: UserStore {
     
     // MARK: Saving AllCharacters to Core Data
-    func saveAllCharacters(what: String) {
+    internal func saveAllCharacters(what: String) {
         
         weak var delegate: AppDelegate?
         weak var context: NSManagedObjectContext?

@@ -13,12 +13,12 @@ protocol View {
 }
 
 final class ViewController: UIViewController, View {
-    var presenter: Presenter?
+    internal var presenter: Presenter?
     
     // Example for UNIT Test
-    var one = 10
-    var two = 30
-    var result1 = Int()
+    private var one = 10
+    private var two = 30
+    private var result1 = Int()
     private func summ() {
         result1 = one + two
     }
@@ -27,14 +27,14 @@ final class ViewController: UIViewController, View {
     internal func updateTableView() {
         myTableView.reloadData()
     }
-    let myTableView: UITableView = {
+    private let myTableView: UITableView = {
         let table = UITableView()
         table.translatesAutoresizingMaskIntoConstraints = false
         table.register(CustomCell.self, forCellReuseIdentifier: "cell")
         table.alpha = 0
         return table
     }()
-    let internetStatusLabel: UILabel = {
+    private let internetStatusLabel: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 20)
         lbl.translatesAutoresizingMaskIntoConstraints = false
@@ -43,7 +43,7 @@ final class ViewController: UIViewController, View {
         lbl.alpha = 0
         return lbl
     }()
-    let loadingLabel: UILabel = {
+    private let loadingLabel: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 20)
         lbl.translatesAutoresizingMaskIntoConstraints = false
@@ -112,7 +112,7 @@ final class ViewController: UIViewController, View {
         splashscreenPicture.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
     }
     
-    let splashscreenPicture: UIImageView = {
+    private let splashscreenPicture: UIImageView = {
         let img = UIImageView()
         img.image = UIImage(named: "Image")
         img.contentMode = .scaleAspectFill

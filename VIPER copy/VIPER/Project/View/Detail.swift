@@ -9,10 +9,10 @@ protocol View1 {
 }
 
 final class SecondViewController: UIViewController, View1 {
-    var results: [UserResults]?
-    var filteredModel: UserResults?
-    var id: Int?
-    var imagesArray: [UIImage]?
+    internal var results: [UserResults]?
+    internal var filteredModel: UserResults?
+    internal var id: Int?
+    internal var imagesArray: [UIImage]?
     
     private func getDataFromBD() {
         print("getting data from BD")
@@ -39,65 +39,65 @@ final class SecondViewController: UIViewController, View1 {
             firstSeenIn.text = filteredModel?.origin?.name
         }
     }
-    var image: UIImageView = {
+    private var image: UIImageView = {
         let img = UIImageView()
         img.contentMode = .scaleAspectFill
         return img
     }()
-    let name: UILabel = {
+    private let name: UILabel = {
         let lbl = UILabel()
         lbl.font = UIFont.systemFont(ofSize: 30, weight: .heavy)
         return lbl
     }()
-    let liveStatusPanel: UILabel = {
+    private let liveStatusPanel: UILabel = {
         let lbl = UILabel()
         lbl.text = "Live status:"
         lbl.textColor = .systemGray
         lbl.font = .systemFont(ofSize: 15)
         return lbl
     }()
-    let liveStatusImage: UIImageView = {
+    private let liveStatusImage: UIImageView = {
         let img = UIImageView()
         img.backgroundColor = .systemGray
         return img
     }()
-    let liveStatus: UILabel = {
+    private let liveStatus: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 20)
         return lbl
     }()
-    let genderPanel: UILabel = {
+    private let genderPanel: UILabel = {
         let lbl = UILabel()
         lbl.textColor = .systemGray
         lbl.font = .systemFont(ofSize: 15)
         lbl.text = "Species and gender:"
         return lbl
     }()
-    var gender: UILabel = {
+    private var gender: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 20)
         return lbl
     }()
-    let lastKnownLocationPanel: UILabel = {
+    private let lastKnownLocationPanel: UILabel = {
         let lbl = UILabel()
         lbl.textColor = .systemGray
         lbl.font = .systemFont(ofSize: 15)
         lbl.text = "Last known location:"
         return lbl
     }()
-    let lastKnownLocation: UILabel = {
+    private let lastKnownLocation: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 20)
         return lbl
     }()
-    let firstSeenInPanel: UILabel = {
+    private let firstSeenInPanel: UILabel = {
         let lbl = UILabel()
         lbl.textColor = .systemGray
         lbl.font = .systemFont(ofSize: 15)
         lbl.text = "First seen in:"
         return lbl
     }()
-    let firstSeenIn: UILabel = {
+    private let firstSeenIn: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 20)
         return lbl

@@ -6,7 +6,7 @@ final class AllCharactersProxy: NSManagedObject {
     @NSManaged var info: Info?
     @NSManaged var results: [Results]?
     
-    var reborn: AllCharacters {
+    private var reborn: AllCharacters {
         get {
             return AllCharacters(info: self.info, results: self.results)
         }

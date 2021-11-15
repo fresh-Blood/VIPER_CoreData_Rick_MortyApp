@@ -19,9 +19,9 @@ protocol GetData {
 
 final class UserInteractor: GetData {
     
-    var store: UserStore?
-    var presenter: Presenter?
-    var timer = Timer()
+    internal var store: UserStore?
+    internal var presenter: Presenter?
+    internal var timer = Timer()
     
     internal func getCharacterImage() {
         do {
