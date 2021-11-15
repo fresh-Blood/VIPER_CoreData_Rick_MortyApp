@@ -91,22 +91,25 @@ final class UserInteractor: GetData {
     func checkConnectionEvery10Seconds() {
         var count: Int = 0 {
             didSet {
-                if count == 1 {
-                    DispatchQueue.main.async {
-                        self.presenter?.view?.animate()
-                    }
-                }
+                count == 1 ? { DispatchQueue.main.async { self.presenter?.view?.animate()}}() : loadDataViaInternet()
             }
         }
         self.timer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true, block: { _ in
-            if self.isConnectedToNetwork() == true {
-                print("Good internet connection")
-                count = 0
-            } else {
-                print("No internet connection")
-                count = 1
-            }
+            self.isConnectedToNetwork() ? goodConnect() : badConnect()
         })
+        func goodConnect() {
+            print("Good internet connection")
+            count = 0
+        }
+        func badConnect() {
+            print("No internet connection")
+            count = 1
+        }
+        func loadDataViaInternet() {
+            self.getAllCharacters()
+            sleep(1)
+            try? self.getCharacterImage()
+        }
     }
     
     func isConnectedToNetwork() -> Bool {
@@ -127,6 +130,8 @@ final class UserInteractor: GetData {
             if let httpResponse = response as? HTTPURLResponse {
                 if httpResponse.statusCode == 200 {
                     status = true
+                } else {
+                    status = false
                 }
             }
         }
