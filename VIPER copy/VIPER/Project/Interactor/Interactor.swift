@@ -91,7 +91,7 @@ final class UserInteractor: GetData {
     func checkConnectionEvery10Seconds() {
         var count: Int = 0 {
             didSet {
-                count == 1 ? { DispatchQueue.main.async { self.presenter?.view?.animate()}}() : loadDataViaInternet()
+                count == 1 ? loadDataViaBD() : loadDataViaInternet()
             }
         }
         self.timer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true, block: { _ in
@@ -106,9 +106,19 @@ final class UserInteractor: GetData {
             count = 1
         }
         func loadDataViaInternet() {
-            self.getAllCharacters()
-            sleep(1)
-            try? self.getCharacterImage()
+            DispatchQueue.global(qos: .background).async {
+                self.getAllCharacters()
+                sleep(1)
+                try? self.getCharacterImage()
+                DispatchQueue.main.async {
+                    self.presenter?.view?.animateGoodConnection()
+                }
+            }
+        }
+        func loadDataViaBD() {
+            DispatchQueue.global(qos: .background).async {
+                DispatchQueue.main.async { self.presenter?.view?.animateBadConnection()}
+            }
         }
     }
     

@@ -15,7 +15,8 @@ import CoreData
 protocol View {
     var presenter: Presenter? { get set }
     func updateTableView()
-    func animate()
+    func animateGoodConnection()
+    func animateBadConnection()
     func loading()
 }
 
@@ -48,9 +49,7 @@ final class ViewController: UIViewController, View {
         lbl.font = .systemFont(ofSize: 20)
         lbl.translatesAutoresizingMaskIntoConstraints = false
         lbl.textAlignment = .center
-        lbl.text = "No internet connection"
         lbl.numberOfLines = 0
-        lbl.backgroundColor = .systemRed
         lbl.alpha = 0
         return lbl
     }()
@@ -65,20 +64,37 @@ final class ViewController: UIViewController, View {
         lbl.alpha = 0
         return lbl
     }()
-    func animate() {
-        UIView.animate(withDuration: 2.0, animations: {
+    func animateBadConnection() {
+        internetStatusLabel.text = "No internet connection"
+        internetStatusLabel.backgroundColor = .systemRed
+        UIView.animate(withDuration: 0.5, animations: {
             self.internetStatusLabel.alpha = 1
         }) { finished in
-            UIView.animate(withDuration: 2.0) {
+            DispatchQueue.main.asyncAfter(deadline: .now()+2.0, execute: {
+            UIView.animate(withDuration: 0.5) {
                 self.internetStatusLabel.alpha = 0
-            }
+                }
+            })
+        }
+    }
+    func animateGoodConnection() {
+        internetStatusLabel.text = "Good internet connection"
+        internetStatusLabel.backgroundColor = .systemGreen
+        UIView.animate(withDuration: 0.5, animations: {
+            self.internetStatusLabel.alpha = 1
+        }) { finished in
+            DispatchQueue.main.asyncAfter(deadline: .now()+2.0, execute: {
+            UIView.animate(withDuration: 0.5) {
+                self.internetStatusLabel.alpha = 0
+                }
+            })
         }
     }
     func loading() {
         UIView.animate(withDuration: 0.5, animations: {
             self.loadingLabel.alpha = 1
         }) { finished in
-            DispatchQueue.main.asyncAfter(deadline: .now()+3.0, execute: {
+            DispatchQueue.main.asyncAfter(deadline: .now()+2.0, execute: {
                 UIView.animate(withDuration: 0.1) {
                     self.loadingLabel.alpha = 0
                 }
