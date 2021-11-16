@@ -153,7 +153,7 @@ final class ViewController: UIViewController, View {
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        DispatchQueue.main.asyncAfter(deadline: .now()+0.5, execute: {
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.45, execute: {
             self.myTableView.alpha = 1
             self.animateTableView()
         })
@@ -189,6 +189,8 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         secondvc.results = presenter?.results
         secondvc.imagesArray = presenter?.imagesArray
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
+            secondvc.modalTransitionStyle = .flipHorizontal
+            secondvc.modalPresentationStyle = .automatic
             self.present(secondvc, animated: true, completion: nil)
         })
         myTableView.deselectRow(at: indexPath, animated: true)
