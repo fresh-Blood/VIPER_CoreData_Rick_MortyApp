@@ -23,7 +23,7 @@ final class ViewController: UIViewController, View {
         result1 = one + two
     }
     //
-
+    
     internal func updateTableView() {
         myTableView.reloadData()
     }
@@ -124,9 +124,8 @@ final class ViewController: UIViewController, View {
         UIView.animate(withDuration: 0.5, animations: {
             self.splashscreenPicture.transform = CGAffineTransform(scaleX: 8.0, y: 8.0)
         }, completion: { finished in
-            UIView.animate(withDuration: 0.1) {
+            UIView.animate(withDuration: 0.5) {
                 self.splashscreenPicture.alpha = 0
-                self.myTableView.alpha = 1
             }
         })
     }
@@ -151,6 +150,13 @@ final class ViewController: UIViewController, View {
             sleep(3)
             print("Таблица обновлена")
         }
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.4, execute: {
+            self.myTableView.alpha = 1
+            self.animateTableView()
+        })
     }
 }
 
@@ -186,6 +192,23 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             self.present(secondvc, animated: true, completion: nil)
         })
         myTableView.deselectRow(at: indexPath, animated: true)
+    }
+    func animateTableView() {
+        myTableView.reloadData()
+        
+        let cells = myTableView.visibleCells
+        let height = myTableView.bounds.height
+        var delay: Double = 0
+        
+        for cell in cells {
+            
+            cell.transform = CGAffineTransform(translationX: 0, y: height)
+            
+            UIView.animate(withDuration: 1.0, delay: delay * 0.05, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: .curveEaseInOut, animations: {
+                cell.transform = CGAffineTransform.identity
+            })
+            delay += 1
+        }
     }
 }
 
