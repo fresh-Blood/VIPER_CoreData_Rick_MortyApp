@@ -38,14 +38,15 @@ final class SecondViewController: UIViewController, View1 {
         firstSeenIn.text = filteredModel?.origin?.name
         
     }
+    
     private var image: UIImageView = {
         let img = UIImageView()
-        img.contentMode = .scaleAspectFill
+        img.contentMode = .scaleToFill
         return img
     }()
     private let name: UILabel = {
         let lbl = UILabel()
-        lbl.font = UIFont.systemFont(ofSize: 30, weight: .heavy)
+        lbl.font = UIFont.systemFont(ofSize: 27, weight: .heavy)
         return lbl
     }()
     private let liveStatusPanel: UILabel = {
@@ -103,46 +104,9 @@ final class SecondViewController: UIViewController, View1 {
         return lbl
     }()
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .white
-        view.addSubview(loadingLabel)
-        view.addSubview(image)
-        view.addSubview(name)
-        view.addSubview(liveStatusPanel)
-        view.addSubview(liveStatusImage)
-        view.addSubview(liveStatus)
-        view.addSubview(genderPanel)
-        view.addSubview(gender)
-        view.addSubview(lastKnownLocationPanel)
-        view.addSubview(lastKnownLocation)
-        view.addSubview(firstSeenInPanel)
-        view.addSubview(firstSeenIn)
-    }
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        let inset: CGFloat = 800
-        loadingLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: inset).isActive = true
-        loadingLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
-        loadingLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
-        loadingLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
-        image.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height/4)
-        name.frame = CGRect(x: 20, y: view.bounds.height/4 + 120, width: view.bounds.width, height: 40)
-        liveStatusPanel.frame = CGRect(x: 20, y: view.bounds.height/4 + 170, width: view.bounds.width, height: 20)
-        liveStatusImage.frame = CGRect(x: 20, y: view.bounds.height/4 + 200, width: 20, height: 20)
-        liveStatusImage.layer.cornerRadius = liveStatusImage.frame.height/2
-        liveStatus.frame = CGRect(x: 60, y: view.bounds.height/4 + 200, width: view.bounds.width, height: 20)
-        genderPanel.frame = CGRect(x: 20, y: view.bounds.height/4 + 250, width: view.bounds.width, height: 20)
-        gender.frame = CGRect(x: 20, y: view.bounds.height/4 + 280, width: view.bounds.width, height: 20)
-        lastKnownLocationPanel.frame = CGRect(x: 20, y: view.bounds.height/4 + 330, width: view.bounds.width, height: 20)
-        lastKnownLocation.frame = CGRect(x: 20, y: view.bounds.height/4 + 360, width: view.bounds.width, height: 20)
-        firstSeenInPanel.frame = CGRect(x: 20, y: view.bounds.height/4 + 410, width: view.bounds.width, height: 20)
-        firstSeenIn.frame = CGRect(x: 20, y: view.bounds.height/4 + 440, width: view.bounds.width, height: 20)
-    }
     private let loadingLabel: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 20)
-        lbl.translatesAutoresizingMaskIntoConstraints = false
         lbl.textAlignment = .center
         lbl.text = "Loading..."
         lbl.numberOfLines = 0
@@ -150,6 +114,59 @@ final class SecondViewController: UIViewController, View1 {
         lbl.alpha = 0
         return lbl
     }()
+    let myScrollView: UIScrollView = {
+       let scrl = UIScrollView()
+        scrl.isScrollEnabled = true
+        return scrl
+    }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .white
+        myScrollView.addSubview(loadingLabel)
+        myScrollView.addSubview(image)
+        myScrollView.addSubview(name)
+        myScrollView.addSubview(liveStatusPanel)
+        myScrollView.addSubview(liveStatusImage)
+        myScrollView.addSubview(liveStatus)
+        myScrollView.addSubview(genderPanel)
+        myScrollView.addSubview(gender)
+        myScrollView.addSubview(lastKnownLocationPanel)
+        myScrollView.addSubview(lastKnownLocation)
+        myScrollView.addSubview(firstSeenInPanel)
+        myScrollView.addSubview(firstSeenIn)
+        view.addSubview(myScrollView)
+        
+    }
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        setFrames()
+    }
+    private func setFrames() {
+        let inset: CGFloat = 20
+        let width = view.bounds.width
+        let height = view.bounds.height
+        let minX = view.bounds.minX
+        let minY = view.bounds.minY
+        
+        myScrollView.frame = view.bounds
+        myScrollView.contentSize = CGSize(width: width, height: height+inset*2)
+        
+        image.frame = CGRect(x: minX, y: minY, width: width, height: height/2)
+        name.frame = CGRect(x: inset, y: image.bounds.height + inset, width: height, height: inset * 2)
+        liveStatusPanel.frame = CGRect(x: inset, y: image.bounds.height + inset*4, width: width, height: inset)
+        liveStatusImage.frame = CGRect(x: inset, y: image.bounds.height + inset*5, width: inset, height: inset)
+        liveStatusImage.layer.cornerRadius = liveStatusImage.frame.height/2
+        liveStatus.frame = CGRect(x: liveStatusImage.bounds.maxX + inset*2, y: image.bounds.height + inset*5, width: width, height: inset)
+        genderPanel.frame = CGRect(x: inset, y: image.bounds.height + inset*7, width: width, height: inset)
+        gender.frame = CGRect(x: inset, y: image.bounds.height + inset*8, width: width, height: inset)
+        lastKnownLocationPanel.frame = CGRect(x: inset, y: image.bounds.height + inset*10, width: width, height: inset)
+        lastKnownLocation.frame = CGRect(x: inset, y: image.bounds.height + inset*11, width: width, height: inset)
+        firstSeenInPanel.frame = CGRect(x: inset, y: image.bounds.height + inset*13, width: width, height: inset)
+        firstSeenIn.frame = CGRect(x: inset, y: image.bounds.height + inset*14, width: width, height: inset)
+        loadingLabel.frame = CGRect(x: minX, y: height - inset*3, width: width, height: inset*3)
+    }
+    
     private func animateLoading() {
         UIView.animate(withDuration: 0.1, animations: {
             self.loadingLabel.alpha = 1

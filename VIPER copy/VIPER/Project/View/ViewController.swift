@@ -133,8 +133,8 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         secondvc.id = Int(person?.id ?? 0)
         secondvc.results = presenter?.results
         secondvc.imagesArray = presenter?.imagesArray
-        secondvc.modalTransitionStyle = .flipHorizontal
-        secondvc.modalPresentationStyle = .automatic
+        secondvc.modalTransitionStyle = .coverVertical
+        secondvc.modalPresentationStyle = .popover
         self.present(secondvc, animated: true, completion: nil)
         myTableView.deselectRow(at: indexPath, animated: true)
     }
