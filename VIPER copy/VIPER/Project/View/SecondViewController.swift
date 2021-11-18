@@ -15,7 +15,6 @@ final class SecondViewController: UIViewController, View1 {
     internal var imagesArray: [UIImage]?
     
     private func getDataFromBD() {
-        print("getting data from BD")
         let filteredArray = self.results?.filter{
             var model: UserResults?
             if $0.id == self.id { model = $0 }
@@ -25,19 +24,19 @@ final class SecondViewController: UIViewController, View1 {
         for model in unwrapped {
             filteredModel = model
         }
-        DispatchQueue.main.async { [self] in
-            if !imagesArray!.isEmpty {
-                guard let unwrappedId = self.id else { return }
-                image.image = imagesArray?[unwrappedId-1]
-            }
-            name.text = filteredModel?.name
-            liveStatus.text = filteredModel?.status
-            if liveStatus.text == "Alive" { liveStatusImage.backgroundColor = .green }
-            else { liveStatusImage.backgroundColor = .red }
-            gender.text = filteredModel?.gender
-            lastKnownLocation.text = filteredModel?.location?.name
-            firstSeenIn.text = filteredModel?.origin?.name
+        
+        if !imagesArray!.isEmpty {
+            guard let unwrappedId = self.id else { return }
+            image.image = imagesArray?[unwrappedId-1]
         }
+        name.text = filteredModel?.name
+        liveStatus.text = filteredModel?.status
+        if liveStatus.text == "Alive" { liveStatusImage.backgroundColor = .green }
+        else { liveStatusImage.backgroundColor = .red }
+        gender.text = filteredModel?.gender
+        lastKnownLocation.text = filteredModel?.location?.name
+        firstSeenIn.text = filteredModel?.origin?.name
+        
     }
     private var image: UIImageView = {
         let img = UIImageView()
@@ -97,15 +96,17 @@ final class SecondViewController: UIViewController, View1 {
         lbl.text = "First seen in:"
         return lbl
     }()
+    
     private let firstSeenIn: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 20)
         return lbl
     }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        getDataFromBD()
         view.backgroundColor = .white
+        view.addSubview(loadingLabel)
         view.addSubview(image)
         view.addSubview(name)
         view.addSubview(liveStatusPanel)
@@ -120,6 +121,11 @@ final class SecondViewController: UIViewController, View1 {
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        let inset: CGFloat = 800
+        loadingLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: inset).isActive = true
+        loadingLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
+        loadingLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
+        loadingLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
         image.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height/4)
         name.frame = CGRect(x: 20, y: view.bounds.height/4 + 120, width: view.bounds.width, height: 40)
         liveStatusPanel.frame = CGRect(x: 20, y: view.bounds.height/4 + 170, width: view.bounds.width, height: 20)
@@ -132,6 +138,35 @@ final class SecondViewController: UIViewController, View1 {
         lastKnownLocation.frame = CGRect(x: 20, y: view.bounds.height/4 + 360, width: view.bounds.width, height: 20)
         firstSeenInPanel.frame = CGRect(x: 20, y: view.bounds.height/4 + 410, width: view.bounds.width, height: 20)
         firstSeenIn.frame = CGRect(x: 20, y: view.bounds.height/4 + 440, width: view.bounds.width, height: 20)
+    }
+    private let loadingLabel: UILabel = {
+        let lbl = UILabel()
+        lbl.font = .systemFont(ofSize: 20)
+        lbl.translatesAutoresizingMaskIntoConstraints = false
+        lbl.textAlignment = .center
+        lbl.text = "Loading..."
+        lbl.numberOfLines = 0
+        lbl.backgroundColor = .systemGreen
+        lbl.alpha = 0
+        return lbl
+    }()
+    private func animateLoading() {
+        UIView.animate(withDuration: 1.5, animations: {
+            self.loadingLabel.alpha = 1
+        }) { finished in
+            UIView.animate(withDuration: 1.5) {
+                self.loadingLabel.alpha = 0
+            }
+        }
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        animateLoading()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        getDataFromBD()
     }
 }
 

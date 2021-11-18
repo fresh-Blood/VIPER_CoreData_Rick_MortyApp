@@ -58,35 +58,39 @@ final class CustomCell: UITableViewCell {
         self.contentView.addSubview(status)
         self.contentView.addSubview(lastKnownLocation)
         self.contentView.addSubview(location)
-        personImage.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true
-        personImage.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10).isActive = true
-        personImage.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 10).isActive = true
-        personImage.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -250).isActive = true
         
-        name.topAnchor.constraint(equalTo: self.topAnchor, constant: 20).isActive = true
-        name.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -110).isActive = true
-        name.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 200).isActive = true
+        // MARK: Insets
+        let inset1:CGFloat = 10
+        let inset2:CGFloat = 250
+        personImage.topAnchor.constraint(equalTo: self.topAnchor, constant: inset1).isActive = true
+        personImage.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -inset1).isActive = true
+        personImage.leftAnchor.constraint(equalTo: self.leftAnchor, constant: inset1).isActive = true
+        personImage.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -inset2).isActive = true
+        
+        name.topAnchor.constraint(equalTo: self.topAnchor, constant: inset1*2).isActive = true
+        name.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -inset1*11).isActive = true
+        name.leftAnchor.constraint(equalTo: self.leftAnchor, constant: inset1*20).isActive = true
         name.rightAnchor.constraint(equalTo: self.rightAnchor, constant: 0).isActive = true
         
-        statusImage.topAnchor.constraint(equalTo: self.topAnchor, constant: 50).isActive = true
-        statusImage.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -80).isActive = true
-        statusImage.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 200).isActive = true
-        statusImage.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -195).isActive = true
+        statusImage.topAnchor.constraint(equalTo: self.topAnchor, constant: inset1*5).isActive = true
+        statusImage.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -inset1*8).isActive = true
+        statusImage.leftAnchor.constraint(equalTo: self.leftAnchor, constant: inset1*20).isActive = true
+        statusImage.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -inset1*19.5).isActive = true
         
-        status.topAnchor.constraint(equalTo: self.topAnchor, constant: 50).isActive = true
-        status.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -80).isActive = true
-        status.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 230).isActive = true
-        status.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -80).isActive = true
+        status.topAnchor.constraint(equalTo: self.topAnchor, constant: inset1*5).isActive = true
+        status.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -inset1*8).isActive = true
+        status.leftAnchor.constraint(equalTo: self.leftAnchor, constant: inset1*23).isActive = true
+        status.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -inset1*8).isActive = true
         
-        lastKnownLocation.topAnchor.constraint(equalTo: self.topAnchor, constant: 80).isActive = true
-        lastKnownLocation.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -50).isActive = true
-        lastKnownLocation.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 200).isActive = true
-        lastKnownLocation.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -50).isActive = true
+        lastKnownLocation.topAnchor.constraint(equalTo: self.topAnchor, constant: inset1*8).isActive = true
+        lastKnownLocation.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -inset1*5).isActive = true
+        lastKnownLocation.leftAnchor.constraint(equalTo: self.leftAnchor, constant: inset1*20).isActive = true
+        lastKnownLocation.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -inset1*5).isActive = true
         
-        location.topAnchor.constraint(equalTo: self.topAnchor, constant: 100).isActive = true
-        location.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10).isActive = true
-        location.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 200).isActive = true
-        location.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -10).isActive = true
+        location.topAnchor.constraint(equalTo: self.topAnchor, constant: inset1*10).isActive = true
+        location.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -inset1).isActive = true
+        location.leftAnchor.constraint(equalTo: self.leftAnchor, constant: inset1*20).isActive = true
+        location.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -inset1).isActive = true
     }
     
     required init?(coder: NSCoder) {

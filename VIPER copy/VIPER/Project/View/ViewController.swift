@@ -8,33 +8,22 @@ import CoreData
 
 protocol View {
     var presenter: Presenter? { get set }
-    func animateConnection(text: String, color: UIColor)
-    func updateTableView()
+    var myTableView: UITableView { get set }
+    var internetStatusLabel: UILabel { get set }
 }
 
 final class ViewController: UIViewController, View {
+    
     internal var presenter: Presenter?
     
-    // Example for UNIT Test
-    private var one = 10
-    private var two = 30
-    private var result1 = Int()
-    private func summ() {
-        result1 = one + two
-    }
-    //
-    
-    internal func updateTableView() {
-        myTableView.reloadData()
-    }
-    private let myTableView: UITableView = {
+    internal var myTableView: UITableView = {
         let table = UITableView()
         table.translatesAutoresizingMaskIntoConstraints = false
         table.register(CustomCell.self, forCellReuseIdentifier: "cell")
         table.alpha = 0
         return table
     }()
-    private let internetStatusLabel: UILabel = {
+    internal var internetStatusLabel: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 20)
         lbl.translatesAutoresizingMaskIntoConstraints = false
@@ -43,40 +32,15 @@ final class ViewController: UIViewController, View {
         lbl.alpha = 0
         return lbl
     }()
-    private let loadingLabel: UILabel = {
-        let lbl = UILabel()
-        lbl.font = .systemFont(ofSize: 20)
-        lbl.translatesAutoresizingMaskIntoConstraints = false
-        lbl.textAlignment = .center
-        lbl.text = "Loading..."
-        lbl.numberOfLines = 0
-        lbl.backgroundColor = .systemGreen
-        lbl.alpha = 0
-        return lbl
-    }()
-    internal func animateConnection(text: String, color: UIColor) {
-        self.internetStatusLabel.text = text
-        self.internetStatusLabel.backgroundColor = color
-        UIView.animate(withDuration: 0.5, animations: {
-            self.internetStatusLabel.alpha = 1
-        }) { finished in
-            DispatchQueue.main.asyncAfter(deadline: .now()+2.0, execute: {
-                UIView.animate(withDuration: 0.5) {
-                    self.internetStatusLabel.alpha = 0
-                }
-            })
-        }
+    
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        myTableView.delegate = self
+        myTableView.dataSource = self
     }
-    private func animateLoading() {
-        UIView.animate(withDuration: 0.5, animations: {
-            self.loadingLabel.alpha = 1
-        }) { finished in
-            DispatchQueue.main.asyncAfter(deadline: .now()+2.0, execute: {
-                UIView.animate(withDuration: 0.1) {
-                    self.loadingLabel.alpha = 0
-                }
-            })
-        }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func viewDidLoad() {
@@ -84,28 +48,27 @@ final class ViewController: UIViewController, View {
         configureRefreshControl()
         splashShowAnimateDismiss()
         view.backgroundColor = .systemGreen
-        myTableView.delegate = self
-        myTableView.dataSource = self
         view.addSubview(splashscreenPicture)
         view.addSubview(myTableView)
         view.addSubview(internetStatusLabel)
-        view.addSubview(loadingLabel)
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        setConstraints()
+    }
+    
+    private func setConstraints() {
+        // MARK: Inset is equal to view anchor and we need to move it down or up to fix our image
+        let inset: CGFloat = 800
         myTableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
         myTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
         myTableView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
         myTableView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
         internetStatusLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
-        internetStatusLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -800).isActive = true
+        internetStatusLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -inset).isActive = true
         internetStatusLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
         internetStatusLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
-        loadingLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 800).isActive = true
-        loadingLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
-        loadingLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
-        loadingLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
         splashscreenPicture.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
         splashscreenPicture.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
         splashscreenPicture.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
@@ -121,11 +84,13 @@ final class ViewController: UIViewController, View {
         return img
     }()
     private func splashShowAnimateDismiss() {
-        UIView.animate(withDuration: 0.5, animations: {
+        UIView.animate(withDuration: 1.0, animations: {
             self.splashscreenPicture.transform = CGAffineTransform(scaleX: 8.0, y: 8.0)
         }, completion: { finished in
-            UIView.animate(withDuration: 0.5) {
-                self.splashscreenPicture.alpha = 0
+            UIView.animate(withDuration: 0.1) { [self] in
+                splashscreenPicture.alpha = 0
+                myTableView.alpha = 1
+                presenter?.animateTableView()
             }
         })
     }
@@ -133,30 +98,23 @@ final class ViewController: UIViewController, View {
         myTableView.refreshControl = UIRefreshControl()
         myTableView.refreshControl?.addTarget(self, action:
                                                 #selector(handleRefreshControl),
-                                              for: .valueChanged)
+                                                for: .valueChanged)
     }
     @objc private func handleRefreshControl() {
-        sleepTemp()
-        DispatchQueue.main.async {
-            self.myTableView.refreshControl?.endRefreshing()
-        }
+        print("Refreshed...")
+        presenter?.updateData()
+        self.myTableView.refreshControl?.endRefreshing()
     }
-    private func sleepTemp() {
-        DispatchQueue.global(qos: .userInteractive).async {
-            print("Старт обновления таблицы за 3 сек")
-            DispatchQueue.main.async {
-                self.updateTableView()
-            }
-            sleep(3)
-            print("Таблица обновлена")
-        }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.presenter?.getData()
     }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        DispatchQueue.main.asyncAfter(deadline: .now()+0.45, execute: {
-            self.myTableView.alpha = 1
-            self.animateTableView()
-        })
+        sleep(1)
+        self.presenter?.saveData()
+        self.presenter?.checkConnection()
     }
 }
 
@@ -168,7 +126,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = myTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomCell
         let model = presenter?.results?[indexPath.row]
-        if !(presenter?.imagesArray?.isEmpty)! {
+        if !(presenter?.imagesArray?.isEmpty ?? false) {
             cell.personImage.image = presenter?.imagesArray?[(model?.id ?? 0) - 1]
         }
         cell.name.text = model?.name
@@ -182,35 +140,15 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         return 150
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        animateLoading()
         let secondvc = SecondViewController()
         let person = presenter?.results?[indexPath.row]
         secondvc.id = Int(person?.id ?? 0)
         secondvc.results = presenter?.results
         secondvc.imagesArray = presenter?.imagesArray
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: {
-            secondvc.modalTransitionStyle = .flipHorizontal
-            secondvc.modalPresentationStyle = .automatic
-            self.present(secondvc, animated: true, completion: nil)
-        })
+        secondvc.modalTransitionStyle = .flipHorizontal
+        secondvc.modalPresentationStyle = .automatic
+        self.present(secondvc, animated: true, completion: nil)
         myTableView.deselectRow(at: indexPath, animated: true)
-    }
-    func animateTableView() {
-        myTableView.reloadData()
-        
-        let cells = myTableView.visibleCells
-        let height = myTableView.bounds.height
-        var delay: Double = 0
-        
-        for cell in cells {
-            
-            cell.transform = CGAffineTransform(translationX: 0, y: height)
-            
-            UIView.animate(withDuration: 1.0, delay: delay * 0.05, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: .curveEaseInOut, animations: {
-                cell.transform = CGAffineTransform.identity
-            })
-            delay += 1
-        }
     }
 }
 

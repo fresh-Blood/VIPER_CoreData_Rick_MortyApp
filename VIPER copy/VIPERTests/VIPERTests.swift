@@ -37,7 +37,7 @@ class VIPERTests: XCTestCase {
     }
     func testSaveToBD() {
         let inputData = "AllCharactersProxy"
-        XCTAssertNoThrow(try sut1.saveTobd(this: inputData))
+        XCTAssertNoThrow(sut1.saveTobd(this: inputData))
         XCTAssertEqual(inputData, "AllCharactersProxy", "Error!")
     }
 }
