@@ -151,7 +151,7 @@ final class SecondViewController: UIViewController, View1 {
         return lbl
     }()
     private func animateLoading() {
-        UIView.animate(withDuration: 1.5, animations: {
+        UIView.animate(withDuration: 0.1, animations: {
             self.loadingLabel.alpha = 1
         }) { finished in
             UIView.animate(withDuration: 1.5) {

@@ -18,7 +18,6 @@ final class ViewController: UIViewController, View {
     
     internal var myTableView: UITableView = {
         let table = UITableView()
-        table.translatesAutoresizingMaskIntoConstraints = false
         table.register(CustomCell.self, forCellReuseIdentifier: "cell")
         table.alpha = 0
         return table
@@ -26,7 +25,6 @@ final class ViewController: UIViewController, View {
     internal var internetStatusLabel: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 20)
-        lbl.translatesAutoresizingMaskIntoConstraints = false
         lbl.textAlignment = .center
         lbl.numberOfLines = 0
         lbl.alpha = 0
@@ -55,37 +53,27 @@ final class ViewController: UIViewController, View {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        setConstraints()
+        setFrames()
     }
     
-    private func setConstraints() {
-        // MARK: Inset is equal to view anchor and we need to move it down or up to fix our image
-        let inset: CGFloat = 800
-        myTableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
-        myTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
-        myTableView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
-        myTableView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
-        internetStatusLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
-        internetStatusLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -inset).isActive = true
-        internetStatusLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
-        internetStatusLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
-        splashscreenPicture.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
-        splashscreenPicture.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
-        splashscreenPicture.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
-        splashscreenPicture.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
+    private func setFrames() {
+        myTableView.frame = view.bounds
+        myTableView.insetsContentViewsToSafeArea = false
+        splashscreenPicture.frame = view.bounds
+        internetStatusLabel.frame = CGRect(x: view.bounds.minX, y: view.bounds.minY, width: view.bounds.width, height: view.bounds.height/10)
     }
     
     private let splashscreenPicture: UIImageView = {
         let img = UIImageView()
         img.image = UIImage(named: "Image")
         img.contentMode = .scaleAspectFill
-        img.translatesAutoresizingMaskIntoConstraints = false
         img.alpha = 1
         return img
     }()
     private func splashShowAnimateDismiss() {
         UIView.animate(withDuration: 1.0, animations: {
-            self.splashscreenPicture.transform = CGAffineTransform(scaleX: 8.0, y: 8.0)
+            self.splashscreenPicture.transform = CGAffineTransform(scaleX: 20.0, y: 20.0)
+            self.splashscreenPicture.transform = .identity
         }, completion: { finished in
             UIView.animate(withDuration: 0.1) { [self] in
                 splashscreenPicture.alpha = 0
@@ -103,18 +91,18 @@ final class ViewController: UIViewController, View {
     @objc private func handleRefreshControl() {
         print("Refreshed...")
         presenter?.updateData()
-        self.myTableView.refreshControl?.endRefreshing()
+        myTableView.refreshControl?.endRefreshing()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.presenter?.getData()
+        presenter?.getData()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         sleep(1)
-        self.presenter?.saveData()
-        self.presenter?.checkConnection()
+        presenter?.saveData()
+        presenter?.checkConnection()
     }
 }
 
