@@ -23,6 +23,9 @@ protocol Presenter {
     func saveData()
     func updateData()
     func animateConnection(status: String, color: UIColor)
+    func saveImage(image: UIImage, name: String)
+    func getImage(name:String) -> UIImage?
+    func deleteImage(name:String)
 }
 
 final class UserPresenter: Presenter {
@@ -53,6 +56,25 @@ final class UserPresenter: Presenter {
         timer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true, block: { [self] _ in
             updateData() // тут данные подтягиваются с нижнего слоя раз в 10 сек
             animateConnection(status: connectionStatus!, color: connectionColor!)
+            // достаем картинки из жесткого диска:
+            if imagesArray?.count == 0 {
+                var names: [String] = []
+                for number in 0..<(results?.count ?? 0) {
+                    names.append(String(number))
+                }
+                for name in names {
+                    guard let image = getImage(name: name) else { return }
+                    imagesArray?.append(image)
+                }
+            }
+        })
+        timer = Timer.scheduledTimer(withTimeInterval: 30.0, repeats: false, block: { [self] _ in // через 30 сек после запуска картинки сохраняются на жесткий диск если массив с картинками не пустой / если на жестком диске данные картинки в данной директории уже есть - они просто перезаписываются 
+            guard let unwrappedImagesArray = imagesArray else { return }
+            if !unwrappedImagesArray.isEmpty {
+                for (index,value) in unwrappedImagesArray.enumerated() {
+                    saveImage(image: value, name: String(index))
+                }
+            }
         })
     }
     
@@ -95,6 +117,15 @@ final class UserPresenter: Presenter {
                 }
             }
         }
+    }
+    internal func saveImage(image: UIImage, name: String) {
+        interactor?.saveImage(image: image, name: name)
+    }
+    internal func getImage(name:String) -> UIImage? {
+        interactor?.getImage(name: name)
+    }
+    internal func deleteImage(name:String) { // метод пока не применен
+        interactor?.deleteImage(name: name)
     }
 }
 

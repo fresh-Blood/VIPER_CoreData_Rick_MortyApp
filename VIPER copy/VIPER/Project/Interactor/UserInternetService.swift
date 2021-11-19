@@ -67,7 +67,7 @@ final class UserInternetService: InternetService {
                             guard let tempImage = UIImage(data: data) else { return }
                             if self.imagesArray?.count != self.results?.count {
                                 self.imagesArray?.append(tempImage)
-                                print("getting characters images...")
+                                print("getting characters images from internet...")
                             }
                         }
                     }
@@ -78,7 +78,7 @@ final class UserInternetService: InternetService {
     
     internal func checkConnectionEvery10Seconds() {
         var count: Int = 0 {
-            didSet { if count != 1 { loadDataFromInternet() }
+            didSet { if count != 1 { loadDataFromInternet() }  
             }
         }
         self.timer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true, block: { [self] _ in
@@ -95,14 +95,14 @@ final class UserInternetService: InternetService {
             }
         })
     }
-    internal func loadDataFromInternet() {
+    private func loadDataFromInternet() {
         DispatchQueue.global(qos: .userInteractive).async { [self] in
             getAllCharacters()
             sleep(1)
             getCharacterImage()
         }
     }
-    internal func isConnectedToNetwork() -> Bool {
+    private func isConnectedToNetwork() -> Bool {
         var status:Bool = false
         
         DispatchQueue.global(qos: .userInteractive).sync {

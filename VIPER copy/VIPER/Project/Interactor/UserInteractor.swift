@@ -19,6 +19,9 @@ protocol GetData {
     func getData()
     func checkConnectionEvery10Seconds()
     func updateData()
+    func saveImage(image: UIImage, name: String)
+    func getImage(name:String) -> UIImage?
+    func deleteImage(name:String)
 }
 
 final class UserInteractor: GetData {
@@ -53,6 +56,15 @@ final class UserInteractor: GetData {
         internetService?.checkConnectionEvery10Seconds()
         results = internetService?.results
         imagesArray = internetService?.imagesArray
+    }
+    internal func saveImage(image: UIImage, name: String) {
+        storeService?.saveImage(image: image, name: name)
+    }
+    internal func getImage(name:String) -> UIImage? {
+        storeService?.getImage(name: name)
+    }
+    internal func deleteImage(name:String) {
+        storeService?.deleteImage(name: name)
     }
 }
 
