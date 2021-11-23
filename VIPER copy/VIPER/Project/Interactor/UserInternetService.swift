@@ -23,20 +23,20 @@ protocol InternetService {
 final class UserInternetService: InternetService {
     
     private var timer = Timer()
-    internal var results: [UserResults]? = []
-    internal var imagesArray: [UIImage]? = []
-    internal var connectionStatus: String? = "Error"
-    internal var connectionColor: UIColor? = .systemRed
-    internal var interactor: GetData?
+    var results: [UserResults]? = []
+    var imagesArray: [UIImage]? = []
+    var connectionStatus: String? = "Error"
+    var connectionColor: UIColor? = .systemRed
+    var interactor: GetData?
     
-    internal func updateData() {
+    func updateData() {
         interactor?.results = self.results
         interactor?.imagesArray = self.imagesArray
         interactor?.connectionStatus = self.connectionStatus
         interactor?.connectionColor = self.connectionColor
     }
     
-    internal func getAllCharacters() {
+    func getAllCharacters() {
         if let url = URL(string: "https://rickandmortyapi.com/api/character") {
             URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
                 if let data = data {
@@ -56,7 +56,7 @@ final class UserInternetService: InternetService {
         }
     }
     
-    internal func getCharacterImage() {
+    func getCharacterImage() {
         do {
             guard let unwrappedArr = self.results else { return }
             if !unwrappedArr.isEmpty {
@@ -76,7 +76,7 @@ final class UserInternetService: InternetService {
         }
     }
     
-    internal func checkConnectionEvery10Seconds() {
+    func checkConnectionEvery10Seconds() {
         var count: Int = 0 {
             didSet { if count != 1 { loadDataFromInternet() }  
             }

@@ -12,10 +12,10 @@ protocol StoreService {
 final class UserStoreService: StoreService {
     
     // MARK: Saving AllCharacters to Core Data
-    internal func saveAllCharacters() {
+    func saveAllCharacters() {
         
-        weak var delegate: AppDelegate?
-        weak var context: NSManagedObjectContext?
+        var delegate: AppDelegate?
+        var context: NSManagedObjectContext?
         
         DispatchQueue.main.async {
             delegate = UIApplication.shared.delegate as? AppDelegate
@@ -34,7 +34,7 @@ final class UserStoreService: StoreService {
         }
     }
     // MARK: File manager work:
-    internal func saveImage(image: UIImage, name: String) {
+    func saveImage(image: UIImage, name: String) {
         guard let data = image.jpegData(compressionQuality: 1.0),
               let path = getPathForTheImage(name: name) else {
                   print("Errors in getting images data")
@@ -49,7 +49,7 @@ final class UserStoreService: StoreService {
         }
     }
     
-    internal func getImage(name:String) -> UIImage? {
+    func getImage(name:String) -> UIImage? {
         guard
             let path = getPathForTheImage(name: name)?.path,
             FileManager.default.fileExists(atPath: path) else {
@@ -60,7 +60,7 @@ final class UserStoreService: StoreService {
         return UIImage(contentsOfFile: path)
     }
     
-    internal func deleteImage(name:String) {
+    func deleteImage(name:String) {
         guard
             let path = getPathForTheImage(name: name),
             FileManager.default.fileExists(atPath: path.path) else {

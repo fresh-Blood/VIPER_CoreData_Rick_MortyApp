@@ -26,15 +26,15 @@ protocol GetData {
 
 final class UserInteractor: GetData {
 
-    internal var imagesArray: [UIImage]?
-    internal var results: [UserResults]?
-    internal var internetService: InternetService?
-    internal var storeService: StoreService?
-    internal var presenter: Presenter?
-    internal var connectionStatus: String?
-    internal var connectionColor: UIColor?
+    var imagesArray: [UIImage]?
+    var results: [UserResults]?
+    var internetService: InternetService?
+    var storeService: StoreService?
+    var presenter: Presenter?
+    var connectionStatus: String?
+    var connectionColor: UIColor?
     
-    internal func updateData() {
+    func updateData() {
         internetService?.updateData()
         results = internetService?.results
         imagesArray = internetService?.imagesArray
@@ -42,28 +42,28 @@ final class UserInteractor: GetData {
         connectionStatus = internetService?.connectionStatus
     }
     
-    internal func getData() {
+    func getData() {
         internetService?.getAllCharacters()
         sleep(1)
         internetService?.getCharacterImage()
     }
     
-    internal func saveTobd() {
+    func saveTobd() {
         storeService?.saveAllCharacters()
     }
         
-    internal func checkConnectionEvery10Seconds() {
+    func checkConnectionEvery10Seconds() {
         internetService?.checkConnectionEvery10Seconds()
         results = internetService?.results
         imagesArray = internetService?.imagesArray
     }
-    internal func saveImage(image: UIImage, name: String) {
+    func saveImage(image: UIImage, name: String) {
         storeService?.saveImage(image: image, name: name)
     }
-    internal func getImage(name:String) -> UIImage? {
+    func getImage(name:String) -> UIImage? {
         storeService?.getImage(name: name)
     }
-    internal func deleteImage(name:String) {
+    func deleteImage(name:String) {
         storeService?.deleteImage(name: name)
     }
 }

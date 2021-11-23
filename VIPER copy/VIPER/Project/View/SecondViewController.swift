@@ -9,10 +9,10 @@ protocol View1 {
 }
 
 final class SecondViewController: UIViewController, View1 {
-    internal var results: [UserResults]?
-    internal var filteredModel: UserResults?
-    internal var id: Int?
-    internal var imagesArray: [UIImage]?
+    var results: [UserResults]?
+    var filteredModel: UserResults?
+    var id: Int?
+    var imagesArray: [UIImage]?
     
     private func getDataFromBD() {
         let filteredArray = self.results?.filter{

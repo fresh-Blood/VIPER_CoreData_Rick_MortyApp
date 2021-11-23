@@ -14,15 +14,15 @@ protocol View {
 
 final class ViewController: UIViewController, View {
     
-    internal var presenter: Presenter?
+    var presenter: Presenter?
     
-    internal var myTableView: UITableView = {
+    var myTableView: UITableView = {
         let table = UITableView()
         table.register(CustomCell.self, forCellReuseIdentifier: "cell")
         table.alpha = 0
         return table
     }()
-    internal var internetStatusLabel: UILabel = {
+    var internetStatusLabel: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 20)
         lbl.textAlignment = .center
