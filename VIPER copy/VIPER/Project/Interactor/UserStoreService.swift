@@ -34,6 +34,7 @@ final class UserStoreService: StoreService {
         }
     }
     // MARK: File manager work:
+    
     func saveImage(image: UIImage, name: String) {
         guard let data = image.jpegData(compressionQuality: 1.0),
               let path = getPathForTheImage(name: name) else {
@@ -89,3 +90,5 @@ final class UserStoreService: StoreService {
         return path
     }
 }
+
+

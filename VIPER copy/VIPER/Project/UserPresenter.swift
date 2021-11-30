@@ -30,25 +30,25 @@ protocol Presenter {
 
 final class UserPresenter: Presenter {
     
-    internal var imagesArray: [UIImage]?
-    internal var results: [UserResults]?
-    internal var view: View?
-    internal var view1: View1?
-    internal var router: Router?
-    internal var interactor: GetData?
-    internal var connectionStatus: String?
-    internal var connectionColor: UIColor?
+    var imagesArray: [UIImage]?
+    var results: [UserResults]?
+    var view: View?
+    var view1: View1?
+    var router: Router?
+    var interactor: GetData?
+    var connectionStatus: String?
+    var connectionColor: UIColor?
     
-    internal func getData() {
+    func getData() {
         self.interactor?.getData()
     }
-    internal func saveData() {
+    func saveData() {
         // MARK: Saving to CoreData
         interactor?.saveTobd()
     }
     private var timer = Timer()
     
-    internal func checkConnection() {
+    func checkConnection() {
         interactor?.checkConnectionEvery10Seconds()
         results = interactor?.results
         imagesArray = interactor?.imagesArray
@@ -78,7 +78,7 @@ final class UserPresenter: Presenter {
         })
     }
     
-    internal func updateData() { // тут данные подтягиваются с нижнего слоя
+    func updateData() { // тут данные подтягиваются с нижнего слоя
         DispatchQueue.main.async {
             self.view?.myTableView.reloadData()
         }
@@ -89,7 +89,7 @@ final class UserPresenter: Presenter {
         connectionColor = interactor?.connectionColor
     }
     
-    internal func animateTableView() {
+    func animateTableView() {
         DispatchQueue.main.async { [self] in
             view?.myTableView.reloadData()
             let cells = view?.myTableView.visibleCells
@@ -105,7 +105,7 @@ final class UserPresenter: Presenter {
             }
         }
     }
-    internal func animateConnection(status: String, color: UIColor) {
+    func animateConnection(status: String, color: UIColor) {
         view?.internetStatusLabel.text = status
         view?.internetStatusLabel.backgroundColor = color
         DispatchQueue.main.async {
@@ -118,13 +118,13 @@ final class UserPresenter: Presenter {
             }
         }
     }
-    internal func saveImage(image: UIImage, name: String) {
+    func saveImage(image: UIImage, name: String) {
         interactor?.saveImage(image: image, name: name)
     }
-    internal func getImage(name:String) -> UIImage? {
+    func getImage(name:String) -> UIImage? {
         interactor?.getImage(name: name)
     }
-    internal func deleteImage(name:String) { // метод пока не применен
+    func deleteImage(name:String) { // метод пока не применен
         interactor?.deleteImage(name: name)
     }
 }
