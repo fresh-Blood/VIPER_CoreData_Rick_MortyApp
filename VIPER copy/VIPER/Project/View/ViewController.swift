@@ -7,9 +7,7 @@ import CoreData
 // reference presenter
 
 protocol View {
-    var presenter: Presenter? { get set }
-    var myTableView: UITableView { get set }
-    var internetStatusLabel: UILabel { get set }
+    func updateView()
 }
 
 final class ViewController: UIViewController, View {
@@ -22,6 +20,7 @@ final class ViewController: UIViewController, View {
         table.alpha = 0
         return table
     }()
+    
     var internetStatusLabel: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 20)
@@ -45,7 +44,7 @@ final class ViewController: UIViewController, View {
         super.viewDidLoad()
         configureRefreshControl()
         splashShowAnimateDismiss()
-        view.backgroundColor = .systemGreen
+        view.backgroundColor = .white
         view.addSubview(splashscreenPicture)
         view.addSubview(myTableView)
         view.addSubview(internetStatusLabel)
@@ -70,39 +69,50 @@ final class ViewController: UIViewController, View {
         img.alpha = 1
         return img
     }()
+    
     private func splashShowAnimateDismiss() {
         UIView.animate(withDuration: 1.0, animations: {
             self.splashscreenPicture.transform = CGAffineTransform(scaleX: 20.0, y: 20.0)
             self.splashscreenPicture.transform = .identity
-        }, completion: { finished in
+        }, completion: { [self] finished in
             UIView.animate(withDuration: 0.1) { [self] in
                 splashscreenPicture.alpha = 0
-                myTableView.alpha = 1
-                presenter?.animateTableView()
+            }
+            myTableView.reloadData()
+            myTableView.alpha = 1
+            let cells = myTableView.visibleCells
+            let height = myTableView.bounds.height
+            var delay: Double = 0
+            for cell in cells {
+                cell.transform = CGAffineTransform(translationX: 0, y: height)
+                UIView.animate(withDuration: 1.0, delay: delay * 0.05, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: .curveEaseInOut, animations: {
+                    cell.transform = CGAffineTransform.identity
+                })
+                delay += 1
             }
         })
     }
+    
     private func configureRefreshControl () {
         myTableView.refreshControl = UIRefreshControl()
         myTableView.refreshControl?.addTarget(self, action:
                                                 #selector(handleRefreshControl),
-                                                for: .valueChanged)
+                                              for: .valueChanged)
     }
+    
     @objc private func handleRefreshControl() {
         print("Refreshed...")
-        presenter?.updateData()
+        myTableView.reloadData()
         myTableView.refreshControl?.endRefreshing()
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         presenter?.getData()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        sleep(1)
-        presenter?.saveData()
-        presenter?.checkConnection()
+    func updateView() {
+        myTableView.reloadData()
     }
 }
 
@@ -111,12 +121,16 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return presenter?.results?.count ?? 0
     }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = myTableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomCell
         let model = presenter?.results?[indexPath.row]
-        if !(presenter?.imagesArray?.isEmpty ?? false) {
-            cell.personImage.image = presenter?.imagesArray?[(model?.id ?? 0) - 1]
+        
+        if let unwrappedModel = model {
+            cell.personImage.image = UIImage(named: "Image")
+            cell.personImage.downlLoadImage(from: unwrappedModel.image)
         }
+        
         cell.name.text = model?.name
         cell.status.text = model?.status
         if cell.status.text == "Alive" { cell.statusImage.backgroundColor = .green }
@@ -124,25 +138,47 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         cell.location.text = model?.location?.name
         return cell
     }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 150
     }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let secondvc = SecondViewController()
         let person = presenter?.results?[indexPath.row]
         secondvc.id = Int(person?.id ?? 0)
         secondvc.results = presenter?.results
-        secondvc.imagesArray = presenter?.imagesArray
         secondvc.modalTransitionStyle = .coverVertical
         secondvc.modalPresentationStyle = .popover
         self.present(secondvc, animated: true, completion: nil)
         myTableView.deselectRow(at: indexPath, animated: true)
     }
+    
 }
 
-
-
-
-
-
+extension UIImageView {
+    
+    func downlLoadImage(from: String) {
+        
+        if let cachedImage = Cashe.imageCache.object(forKey: from as AnyObject) {
+            debugPrint("Image loaded from cache")
+            self.image = cachedImage
+            return
+        }
+        
+        if let url = URL(string: from) {
+            URLSession.shared.dataTask(with: url, completionHandler: { data, response, error in
+                if let data = data {
+                    DispatchQueue.main.async {
+                        guard
+                            let unwrappedImage = UIImage(data: data) else { return }
+                        Cashe.imageCache.setObject(unwrappedImage, forKey: from as AnyObject)
+                        debugPrint("Image loaded from internet")
+                        self.image = UIImage(data: data)
+                    }
+                }
+            }).resume()
+        }
+    }
+}
 

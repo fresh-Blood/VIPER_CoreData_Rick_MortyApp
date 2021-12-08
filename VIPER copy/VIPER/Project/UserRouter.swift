@@ -17,23 +17,21 @@ final class UserRouter: Router {
     static func start() -> Router {
         let router = UserRouter()
         
-        var view: View = ViewController()
-        var presenter: Presenter = UserPresenter()
+        let view = ViewController()
+        let presenter = UserPresenter()
         var interactor: GetData = UserInteractor()
         let internetService: InternetService = UserInternetService()
         let storeService: StoreService = UserStoreService()
         
         view.presenter = presenter
         
-        interactor.presenter = presenter
         interactor.internetService = internetService
         interactor.storeService = storeService
-
-        presenter.router = router
+        
         presenter.view = view
         presenter.interactor = interactor
         
-        router.entry = view as? EntryPoint
+        router.entry = view as EntryPoint
         return router
     }
 }

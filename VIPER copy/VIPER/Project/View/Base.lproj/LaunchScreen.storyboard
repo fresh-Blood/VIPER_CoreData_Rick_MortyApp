@@ -38,6 +38,9 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="fok-7y-XO1" secondAttribute="trailing" constant="136" id="rc2-TK-wu6"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="loadingLbl" destination="fok-7y-XO1" id="z2e-oD-PGN"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

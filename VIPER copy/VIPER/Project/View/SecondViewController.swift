@@ -3,7 +3,6 @@ import CoreData
 
 protocol View1 {
     var results : [UserResults]? { get set }
-    var imagesArray: [UIImage]? { get set }
     var id: Int? { get set }
     var filteredModel: UserResults? { get set }
 }
@@ -12,7 +11,6 @@ final class SecondViewController: UIViewController, View1 {
     var results: [UserResults]?
     var filteredModel: UserResults?
     var id: Int?
-    var imagesArray: [UIImage]?
     
     private func getDataFromBD() {
         let filteredArray = self.results?.filter{
@@ -20,15 +18,13 @@ final class SecondViewController: UIViewController, View1 {
             if $0.id == self.id { model = $0 }
             return model != nil
         }
+        
         guard let unwrapped = filteredArray else { return }
         for model in unwrapped {
             filteredModel = model
         }
         
-        if !imagesArray!.isEmpty {
-            guard let unwrappedId = self.id else { return }
-            image.image = imagesArray?[unwrappedId-1]
-        }
+        image.downlLoadImage(from: filteredModel?.image ?? "Error")
         name.text = filteredModel?.name
         liveStatus.text = filteredModel?.status
         if liveStatus.text == "Alive" { liveStatusImage.backgroundColor = .green }
@@ -36,19 +32,20 @@ final class SecondViewController: UIViewController, View1 {
         gender.text = filteredModel?.gender
         lastKnownLocation.text = filteredModel?.location?.name
         firstSeenIn.text = filteredModel?.origin?.name
-        
     }
     
-    private var image: UIImageView = {
+    var image: UIImageView = {
         let img = UIImageView()
-        img.contentMode = .scaleToFill
+        img.contentMode = .scaleAspectFill
         return img
     }()
+    
     private let name: UILabel = {
         let lbl = UILabel()
         lbl.font = UIFont.systemFont(ofSize: 27, weight: .heavy)
         return lbl
     }()
+    
     private let liveStatusPanel: UILabel = {
         let lbl = UILabel()
         lbl.text = "Live status:"
@@ -56,16 +53,19 @@ final class SecondViewController: UIViewController, View1 {
         lbl.font = .systemFont(ofSize: 15)
         return lbl
     }()
+    
     private let liveStatusImage: UIImageView = {
         let img = UIImageView()
         img.backgroundColor = .systemGray
         return img
     }()
+    
     private let liveStatus: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 20)
         return lbl
     }()
+    
     private let genderPanel: UILabel = {
         let lbl = UILabel()
         lbl.textColor = .systemGray
@@ -73,11 +73,13 @@ final class SecondViewController: UIViewController, View1 {
         lbl.text = "Species and gender:"
         return lbl
     }()
+    
     private var gender: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 20)
         return lbl
     }()
+    
     private let lastKnownLocationPanel: UILabel = {
         let lbl = UILabel()
         lbl.textColor = .systemGray
@@ -85,11 +87,13 @@ final class SecondViewController: UIViewController, View1 {
         lbl.text = "Last known location:"
         return lbl
     }()
+    
     private let lastKnownLocation: UILabel = {
         let lbl = UILabel()
         lbl.font = .systemFont(ofSize: 20)
         return lbl
     }()
+    
     private let firstSeenInPanel: UILabel = {
         let lbl = UILabel()
         lbl.textColor = .systemGray
@@ -114,6 +118,7 @@ final class SecondViewController: UIViewController, View1 {
         lbl.alpha = 0
         return lbl
     }()
+    
     let myScrollView: UIScrollView = {
        let scrl = UIScrollView()
         scrl.isScrollEnabled = true
@@ -138,10 +143,12 @@ final class SecondViewController: UIViewController, View1 {
         view.addSubview(myScrollView)
         
     }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         setFrames()
     }
+    
     private func setFrames() {
         let inset: CGFloat = 20
         let width = view.bounds.width
@@ -153,7 +160,7 @@ final class SecondViewController: UIViewController, View1 {
         myScrollView.contentSize = CGSize(width: width, height: height+inset*2)
         
         image.frame = CGRect(x: minX, y: minY, width: width, height: height/2)
-        name.frame = CGRect(x: inset, y: image.bounds.height + inset, width: height, height: inset * 2)
+        name.frame = CGRect(x: inset, y: image.bounds.height + inset*2, width: height, height: inset * 2)
         liveStatusPanel.frame = CGRect(x: inset, y: image.bounds.height + inset*4, width: width, height: inset)
         liveStatusImage.frame = CGRect(x: inset, y: image.bounds.height + inset*5, width: inset, height: inset)
         liveStatusImage.layer.cornerRadius = liveStatusImage.frame.height/2
@@ -176,6 +183,7 @@ final class SecondViewController: UIViewController, View1 {
             }
         }
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         animateLoading()

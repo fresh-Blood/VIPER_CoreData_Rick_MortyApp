@@ -10,61 +10,55 @@ import CoreData
 protocol GetData {
     var storeService: StoreService? { get set }
     var internetService: InternetService? { get set }
-    var presenter: Presenter? { get set }
-    var results: [UserResults]? { get set }
-    var imagesArray: [UIImage]? { get set }
-    var connectionStatus: String? { get set }
-    var connectionColor: UIColor? { get set }
-    func saveTobd()
-    func getData()
-    func checkConnectionEvery10Seconds()
-    func updateData()
-    func saveImage(image: UIImage, name: String)
-    func getImage(name:String) -> UIImage?
-    func deleteImage(name:String)
+    
+    func getImage(name:String) -> UIImage? // с жесткого диска
+    func downloadImage(forItemAtIndex: Int, arrayOfModels: [UserResults], closure: @escaping (UIImage) -> Void) // из инета
+    func saveData() // на жесткий диск
+    func getData(closure: @escaping ([UserResults]) -> Void) // из инета 
 }
 
 final class UserInteractor: GetData {
-
-    var imagesArray: [UIImage]?
-    var results: [UserResults]?
+    
     var internetService: InternetService?
     var storeService: StoreService?
-    var presenter: Presenter?
-    var connectionStatus: String?
-    var connectionColor: UIColor?
     
-    func updateData() {
-        internetService?.updateData()
-        results = internetService?.results
-        imagesArray = internetService?.imagesArray
-        connectionColor = internetService?.connectionColor
-        connectionStatus = internetService?.connectionStatus
+    func getData(closure: @escaping ([UserResults]) -> Void ) {
+        internetService?.getAllCharacters(results: { array in
+            closure(array)
+            self.saveData()
+        })
     }
     
-    func getData() {
-        internetService?.getAllCharacters()
-        sleep(1)
-        internetService?.getCharacterImage()
-    }
-    
-    func saveTobd() {
-        storeService?.saveAllCharacters()
-    }
-        
-    func checkConnectionEvery10Seconds() {
-        internetService?.checkConnectionEvery10Seconds()
-        results = internetService?.results
-        imagesArray = internetService?.imagesArray
-    }
-    func saveImage(image: UIImage, name: String) {
-        storeService?.saveImage(image: image, name: name)
-    }
-    func getImage(name:String) -> UIImage? {
+    func getImage(name:String) -> UIImage? { //с жесткого диска
         storeService?.getImage(name: name)
     }
-    func deleteImage(name:String) {
-        storeService?.deleteImage(name: name)
+    
+    func downloadImage(forItemAtIndex: Int, arrayOfModels: [UserResults], closure: @escaping (UIImage) -> Void) {
+        internetService?.downloadImage(forItemAtIndex: forItemAtIndex, arrayOfModels: arrayOfModels, closure: { image in
+            closure(image)
+        })
+    }
+    func saveData() {
+        let resultToCheck = String(Date()
+                                    .description[Date()
+                                                    .description
+                                                    .index(Date()
+                                                            .description
+                                                            .startIndex,offsetBy: 8)]) +
+        String(Date()
+                .description[Date()
+                                .description
+                                .index(Date()
+                                        .description
+                                        .startIndex, offsetBy: 9)])
+        let dateToSave = "05"
+        if dateToSave == resultToCheck {
+            storeService?.saveAllCharacters()
+            //                let id = results.map{$0.map{$0.id}}
+            //                self.storeService?.saveImage(image: image, name: String(id)) // сохранение на жесткий диск
+        } else {
+            print("It's not the 5th of the current month to save")
+        }
     }
 }
 

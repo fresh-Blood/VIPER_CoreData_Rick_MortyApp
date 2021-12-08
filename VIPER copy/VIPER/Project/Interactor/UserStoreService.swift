@@ -6,7 +6,6 @@ protocol StoreService {
     func saveAllCharacters()
     func saveImage(image: UIImage, name: String)
     func getImage(name:String) -> UIImage?
-    func deleteImage(name:String)
 }
 
 final class UserStoreService: StoreService {
@@ -23,6 +22,7 @@ final class UserStoreService: StoreService {
         context = delegate?.persistentContainer.viewContext
         if let unwrappedContext = context {
             _ = NSEntityDescription.insertNewObject(forEntityName: "AllCharactersProxy", into: unwrappedContext)
+            
         }
         do {
             try context?.save()
@@ -54,27 +54,11 @@ final class UserStoreService: StoreService {
         guard
             let path = getPathForTheImage(name: name)?.path,
             FileManager.default.fileExists(atPath: path) else {
-                print("Error getting path")
+                print("Error getting path*")
                 return nil
             }
         print("Success in getting image from FileManager")
         return UIImage(contentsOfFile: path)
-    }
-    
-    func deleteImage(name:String) {
-        guard
-            let path = getPathForTheImage(name: name),
-            FileManager.default.fileExists(atPath: path.path) else {
-                print("Error getting path")
-                return
-            }
-        do {
-            try FileManager.default.removeItem(at: path)
-            print("Successfully deleted from FileManager")
-        }
-        catch let error {
-            print("Error deleting image. \(error)")
-        }
     }
     
     private func getPathForTheImage(name:String) -> URL? {
@@ -92,3 +76,8 @@ final class UserStoreService: StoreService {
 }
 
 
+final class Cashe {
+    
+    static let imageCache = NSCache<AnyObject,UIImage>()
+
+}
