@@ -30,10 +30,10 @@ final class UserPresenter: Presenter, PresenterForInteractor {
     var results: [UserResults]?
     
     func getData() {
-        interactor?.getData(closure: { [self] array in
-            results = array
+        interactor?.getData(closure: { [weak self] array in
+            self?.results = array
             DispatchQueue.main.async {
-                view?.updateView()
+                self?.view?.updateView()
             }
         })
     }

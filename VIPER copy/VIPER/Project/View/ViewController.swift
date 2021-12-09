@@ -8,6 +8,7 @@ import CoreData
 
 protocol View {
     func updateView()
+    var presenter: Presenter? { get }
 }
 
 final class ViewController: UIViewController, View {
@@ -71,20 +72,22 @@ final class ViewController: UIViewController, View {
     }()
     
     private func splashShowAnimateDismiss() {
-        UIView.animate(withDuration: 1.0, animations: {
-            self.splashscreenPicture.transform = CGAffineTransform(scaleX: 20.0, y: 20.0)
-            self.splashscreenPicture.transform = .identity
-        }, completion: { [self] finished in
-            UIView.animate(withDuration: 0.1) { [self] in
-                splashscreenPicture.alpha = 0
+        UIView.animate(withDuration: 1.0, animations: { [weak self] in
+            self?.splashscreenPicture.transform = CGAffineTransform(scaleX: 20.0, y: 20.0)
+            self?.splashscreenPicture.transform = .identity
+        }, completion: { [weak self] finished in
+            UIView.animate(withDuration: 0.1) {
+                self?.splashscreenPicture.alpha = 0
             }
-            myTableView.reloadData()
-            myTableView.alpha = 1
-            let cells = myTableView.visibleCells
-            let height = myTableView.bounds.height
+            self?.myTableView.reloadData()
+            self?.myTableView.alpha = 1
+            let cells = self?.myTableView.visibleCells
+            let height = self?.myTableView.bounds.height
             var delay: Double = 0
-            for cell in cells {
-                cell.transform = CGAffineTransform(translationX: 0, y: height)
+            guard
+                let unwrappedCells = cells else { return }
+            for cell in unwrappedCells {
+                cell.transform = CGAffineTransform(translationX: 0, y: height ?? 0)
                 UIView.animate(withDuration: 1.0, delay: delay * 0.05, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: .curveEaseInOut, animations: {
                     cell.transform = CGAffineTransform.identity
                 })
@@ -150,7 +153,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         secondvc.results = presenter?.results
         secondvc.modalTransitionStyle = .coverVertical
         secondvc.modalPresentationStyle = .popover
-        self.present(secondvc, animated: true, completion: nil)
+        present(secondvc, animated: true, completion: nil)
         myTableView.deselectRow(at: indexPath, animated: true)
     }
     
