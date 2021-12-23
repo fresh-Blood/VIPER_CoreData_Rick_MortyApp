@@ -12,7 +12,7 @@ protocol Router {
 }
 
 final class UserRouter: Router {
-    internal var entry: EntryPoint?
+    var entry: EntryPoint?
     
     static func start() -> Router {
         let router = UserRouter()

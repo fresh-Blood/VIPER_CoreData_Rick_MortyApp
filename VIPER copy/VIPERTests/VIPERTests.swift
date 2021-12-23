@@ -10,7 +10,6 @@ import XCTest
 
 var sut: ViewController! // system under test
 var sut1: UserInteractor!
-var sut2: Store!
 
 class VIPERTests: XCTestCase {
     
@@ -27,19 +26,19 @@ class VIPERTests: XCTestCase {
         try super.tearDownWithError()
         // Put teardown code here. This method is called after the invocation of each test method in the class. // Поместите здесь код разборки. Этот метод вызывается после вызова каждого тестового метода в классе.
     }
-    func testCheckSumm() {
-        // given (дано)
-        let result = sut.one + sut.two
-        // when (когда)
-        sut.summ()
-        // then (тогда)
-        XCTAssertEqual(result, 40, "Error!")
-    }
-    func testSaveToBD() {
-        let inputData = "AllCharactersProxy"
-        XCTAssertNoThrow(sut1.saveTobd(this: inputData))
-        XCTAssertEqual(inputData, "AllCharactersProxy", "Error!")
-    }
+//    func testCheckSumm() {
+//        // given (дано)
+//        let result = sut.one + sut.two
+//        // when (когда)
+//        sut.summ()
+//        // then (тогда)
+//        XCTAssertEqual(result, 40, "Error!")
+//    }
+//    func testSaveToBD() {
+//        let inputData = "AllCharactersProxy"
+//        XCTAssertNoThrow(sut1.saveTobd(this: inputData))
+//        XCTAssertEqual(inputData, "AllCharactersProxy", "Error!")
+//    }
 }
 
 
