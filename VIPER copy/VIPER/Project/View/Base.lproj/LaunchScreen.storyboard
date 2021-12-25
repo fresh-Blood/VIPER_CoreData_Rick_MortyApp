@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
-    <device id="retina3_5" orientation="portrait" appearance="light"/>
+    <device id="retina6_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -12,17 +12,14 @@
             <objects>
                 <viewController id="01J-lp-oVM" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Image" translatesAutoresizingMaskIntoConstraints="NO" id="dhE-vJ-Mib">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                                <rect key="frame" x="0.0" y="44" width="428" height="848"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LOADING..." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fok-7y-XO1">
-                                <rect key="frame" x="10" y="381" width="300" height="66.5"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="fok-7y-XO1" secondAttribute="height" multiplier="185:41" id="3rT-Pt-db8"/>
-                                </constraints>
+                                <rect key="frame" x="0.0" y="667" width="428" height="192.66666666666663"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle2"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -31,15 +28,14 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" red="0.053614628719138753" green="0.088993713439925903" blue="0.19513096760228732" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="fok-7y-XO1" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="0C7-7K-y9M"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="fok-7y-XO1" secondAttribute="trailing" constant="10" id="7O1-eF-OiB"/>
-                            <constraint firstItem="fok-7y-XO1" firstAttribute="top" relation="lessThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="623" id="Gir-Ff-Xc3"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="fok-7y-XO1" secondAttribute="bottom" constant="32.329999999999998" id="eQv-14-4Ak"/>
-                            <constraint firstItem="dhE-vJ-Mib" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="hz6-2X-qx6"/>
-                            <constraint firstItem="fok-7y-XO1" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="iMX-au-Oc6"/>
-                            <constraint firstItem="dhE-vJ-Mib" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="lDL-YY-MaW"/>
-                            <constraint firstAttribute="trailing" secondItem="dhE-vJ-Mib" secondAttribute="trailing" id="tXZ-Ea-sa8"/>
-                            <constraint firstAttribute="bottom" secondItem="dhE-vJ-Mib" secondAttribute="bottom" id="ucq-Wp-Hvy"/>
+                            <constraint firstItem="dhE-vJ-Mib" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="3cT-w3-iHP"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="fok-7y-XO1" secondAttribute="bottom" constant="32.5" id="6Fg-eM-i61"/>
+                            <constraint firstItem="fok-7y-XO1" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="7t9-uA-rVD"/>
+                            <constraint firstItem="dhE-vJ-Mib" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="F4v-hW-rmw"/>
+                            <constraint firstItem="dhE-vJ-Mib" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="HGZ-e3-zJd"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="fok-7y-XO1" secondAttribute="trailing" id="jaR-ZZ-NGY"/>
+                            <constraint firstItem="dhE-vJ-Mib" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="q2G-kr-dno"/>
+                            <constraint firstItem="fok-7y-XO1" firstAttribute="top" relation="lessThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="623" id="wNL-Ew-47g"/>
                         </constraints>
                     </view>
                     <connections>
@@ -48,7 +44,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="50.769230769230766" y="374.64454976303318"/>
+            <point key="canvasLocation" x="50.724637681159422" y="374.33035714285711"/>
         </scene>
     </scenes>
     <resources>
