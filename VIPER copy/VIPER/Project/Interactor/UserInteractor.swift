@@ -11,10 +11,10 @@ protocol GetData {
     var storeService: StoreService? { get set }
     var internetService: InternetService? { get set }
     
-    func getImage(name:String) -> UIImage? // с жесткого диска
-    func downloadImage(forItemAtIndex: Int, arrayOfModels: [UserResults], closure: @escaping (UIImage) -> Void) // из инета
-    func saveData() // на жесткий диск
-    func getData(closure: @escaping ([UserResults]) -> Void) // из инета 
+    func getImage(name:String) -> UIImage?
+    func downloadImage(forItemAtIndex: Int, arrayOfModels: [UserResults], closure: @escaping (UIImage) -> Void)
+    func saveData()
+    func getData(closure: @escaping ([UserResults]) -> Void)
 }
 
 final class UserInteractor: GetData {
@@ -29,7 +29,7 @@ final class UserInteractor: GetData {
         })
     }
     
-    func getImage(name:String) -> UIImage? { //с жесткого диска
+    func getImage(name:String) -> UIImage? {
         storeService?.getImage(name: name)
     }
     
@@ -54,8 +54,6 @@ final class UserInteractor: GetData {
         let dateToSave = "05"
         if dateToSave == resultToCheck {
             storeService?.saveAllCharacters()
-            //                let id = results.map{$0.map{$0.id}}
-            //                self.storeService?.saveImage(image: image, name: String(id)) // сохранение на жесткий диск
         } else {
             print("It's not the 5th of the current month to save")
         }

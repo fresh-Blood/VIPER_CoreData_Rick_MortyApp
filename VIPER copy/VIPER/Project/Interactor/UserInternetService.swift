@@ -1,10 +1,3 @@
-//
-//  InternetServis.swift
-//  VIPER
-//
-//  Created by Admin on 17.11.2021.
-//
-
 import Foundation
 import UIKit
 
