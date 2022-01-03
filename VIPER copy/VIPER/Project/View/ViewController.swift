@@ -45,7 +45,6 @@ final class ViewController: UIViewController, View {
         super.viewDidLoad()
         configureRefreshControl()
         splashShowAnimateDismiss()
-        view.backgroundColor = .white
         view.addSubview(splashscreenPicture)
         view.addSubview(myTableView)
         view.addSubview(internetStatusLabel)
@@ -57,7 +56,10 @@ final class ViewController: UIViewController, View {
     }
     
     private func setFrames() {
-        myTableView.frame = view.bounds
+        myTableView.frame = CGRect(x: view.bounds.minX + view.safeAreaInsets.left,
+                                   y: view.bounds.minY,
+                                   width: view.bounds.width - view.safeAreaInsets.left - view.safeAreaInsets.right,
+                                   height: view.bounds.height)
         myTableView.insetsContentViewsToSafeArea = false
         splashscreenPicture.frame = view.bounds
         internetStatusLabel.frame = CGRect(x: view.bounds.minX, y: view.bounds.minY, width: view.bounds.width, height: view.bounds.height/10)
@@ -151,12 +153,9 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         let person = presenter?.results?[indexPath.row]
         secondvc.id = Int(person?.id ?? 0)
         secondvc.results = presenter?.results
-        secondvc.modalTransitionStyle = .coverVertical
-        secondvc.modalPresentationStyle = .popover
-        present(secondvc, animated: true, completion: nil)
+        self.navigationController?.pushViewController(secondvc, animated: true)
         myTableView.deselectRow(at: indexPath, animated: true)
     }
-    
 }
 
 extension UIImageView {

@@ -70,7 +70,6 @@ final class CustomCell: UITableViewCell {
         let size1 = CGSize(width: inset*1.5, height: inset*1.5)
         
         self.contentView.layer.borderWidth = 10
-        self.contentView.layer.borderColor = UIColor.white.cgColor
         self.contentView.layer.masksToBounds = true
         
         personImage.frame = CGRect(origin: point, size: size)

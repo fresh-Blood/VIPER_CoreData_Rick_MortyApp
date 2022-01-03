@@ -36,7 +36,7 @@ final class SecondViewController: UIViewController, View1 {
     
     var image: UIImageView = {
         let img = UIImageView()
-        img.contentMode = .scaleAspectFill
+        img.contentMode = .scaleAspectFit
         return img
     }()
     
@@ -127,7 +127,7 @@ final class SecondViewController: UIViewController, View1 {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .systemGroupedBackground
         myScrollView.addSubview(loadingLabel)
         myScrollView.addSubview(image)
         myScrollView.addSubview(name)
@@ -141,7 +141,7 @@ final class SecondViewController: UIViewController, View1 {
         myScrollView.addSubview(firstSeenInPanel)
         myScrollView.addSubview(firstSeenIn)
         view.addSubview(myScrollView)
-        
+        self.title = "Details"
     }
     
     override func viewDidLayoutSubviews() {
@@ -151,16 +151,25 @@ final class SecondViewController: UIViewController, View1 {
     
     private func setFrames() {
         let inset: CGFloat = 20
-        let width = view.bounds.width
+        let width = view.bounds.width - view.safeAreaInsets.left - view.safeAreaInsets.right
         let height = view.bounds.height
-        let minX = view.bounds.minX
+        let minX = view.bounds.minX + view.safeAreaInsets.left
         let minY = view.bounds.minY
         
-        myScrollView.frame = view.bounds
+        myScrollView.frame = CGRect(x: minX,
+                                    y: minY,
+                                    width: width,
+                                    height: height)
         myScrollView.contentSize = CGSize(width: width, height: height+inset*2)
         
-        image.frame = CGRect(x: minX, y: minY, width: width, height: height/2)
-        name.frame = CGRect(x: inset, y: image.bounds.height + inset*2, width: height, height: inset * 2)
+        image.frame = CGRect(x: minX,
+                             y: minY,
+                             width: width,
+                             height: height/2)
+        name.frame = CGRect(x: inset,
+                            y: image.bounds.height + inset*2,
+                            width: height,
+                            height: inset * 2)
         liveStatusPanel.frame = CGRect(x: inset, y: image.bounds.height + inset*4, width: width, height: inset)
         liveStatusImage.frame = CGRect(x: inset, y: image.bounds.height + inset*5, width: inset, height: inset)
         liveStatusImage.layer.cornerRadius = liveStatusImage.frame.height/2

@@ -16,16 +16,16 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Image" translatesAutoresizingMaskIntoConstraints="NO" id="dhE-vJ-Mib">
-                                <rect key="frame" x="0.0" y="44" width="428" height="848"/>
+                                <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" red="0.053614628719138753" green="0.088993713439925903" blue="0.19513096760228732" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="dhE-vJ-Mib" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="3cT-w3-iHP"/>
-                            <constraint firstItem="dhE-vJ-Mib" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="F4v-hW-rmw"/>
-                            <constraint firstItem="dhE-vJ-Mib" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="HGZ-e3-zJd"/>
-                            <constraint firstItem="dhE-vJ-Mib" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="q2G-kr-dno"/>
+                            <constraint firstItem="dhE-vJ-Mib" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="3cT-w3-iHP"/>
+                            <constraint firstItem="dhE-vJ-Mib" firstAttribute="trailing" secondItem="Ze5-6b-2t3" secondAttribute="trailing" id="F4v-hW-rmw"/>
+                            <constraint firstItem="dhE-vJ-Mib" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="HGZ-e3-zJd"/>
+                            <constraint firstItem="dhE-vJ-Mib" firstAttribute="bottom" secondItem="Ze5-6b-2t3" secondAttribute="bottom" id="q2G-kr-dno"/>
                         </constraints>
                     </view>
                 </viewController>

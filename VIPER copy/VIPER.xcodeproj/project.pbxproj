@@ -111,7 +111,6 @@
 				8445016A271E0CD7004E116B /* SceneDelegate.swift */,
 				8445017F271E0CE4004E116B /* Project */,
 				8445016E271E0CD7004E116B /* Main.storyboard */,
-				84CA7D61272AB75F00494B08 /* Cell.swift */,
 				84450174271E0CDC004E116B /* Assets.xcassets */,
 				84450179271E0CDC004E116B /* Info.plist */,
 				84450171271E0CD7004E116B /* VIPER.xcdatamodeld */,
@@ -135,6 +134,7 @@
 			isa = PBXGroup;
 			children = (
 				8445016C271E0CD7004E116B /* ViewController.swift */,
+				84CA7D61272AB75F00494B08 /* Cell.swift */,
 				84975A9B272B226B00B35C5B /* SecondViewController.swift */,
 				84450176271E0CDC004E116B /* LaunchScreen.storyboard */,
 			);
