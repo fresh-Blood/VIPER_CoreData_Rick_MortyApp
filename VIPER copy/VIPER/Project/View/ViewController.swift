@@ -45,6 +45,7 @@ final class ViewController: UIViewController, View {
         super.viewDidLoad()
         configureRefreshControl()
         splashShowAnimateDismiss()
+        myTableView.backgroundColor = .systemGroupedBackground
         view.addSubview(splashscreenPicture)
         view.addSubview(myTableView)
         view.addSubview(internetStatusLabel)
