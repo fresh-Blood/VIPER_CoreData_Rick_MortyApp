@@ -1,10 +1,3 @@
-//
-//  SceneDelegate.swift
-//  VIPER
-//
-//  Created by Admin on 18.10.2021.
-//
-
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {

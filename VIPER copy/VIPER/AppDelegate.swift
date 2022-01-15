@@ -1,10 +1,3 @@
-//
-//  AppDelegate.swift
-//  VIPER
-//
-//  Created by Admin on 18.10.2021.
-//
-
 import UIKit
 import CoreData
 import AVKit
